@@ -2,22 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<meta name="description" content="Savoria - Fine Dining Experience. Discover exquisite cuisine with our curated menu, premium reservations, and efficient online ordering system.">
-<meta name="keywords" content="fine dining, restaurant, reservations, gourmet cuisine, luxury dining, food delivery">
-<meta name="author" content="Savoria Restaurant">
-<meta name="theme-color" content="#C8972A">
-<meta property="og:title" content="Savoria – Fine Dining Experience">
-<meta property="og:description" content="Experience culinary excellence at Savoria, where artistry meets elegance.">
-<meta property="og:image" content="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80">
-<meta property="og:type" content="website">
-<link rel="canonical" href="/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23C8972A'>🍽️</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Savoria – Fine Dining Experience</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="preload" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-CdQTlWQDm2g/NwvqKeJ5v4hDmqyClTqy8/Zm4VrLKpXfH7XUTZR1fC9C51rvjgJqVvJpSYOY3CXfuRdAqGUxA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" integrity="sha512-BzqHEK0jfQ0K6nYKq0ey+UUdFzYU0DVEpXFH/LzFgx3tJqH0FjhvbL0T2T2H5uKZTvM37s5kz9zVt2LvRvKSA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
 <style>
 :root {
   --primary: #C8972A;
@@ -893,14 +882,11 @@ footer {
 </head>
 <body>
 
-<!-- ─── Skip to content link ─── -->
-<a href="#app" class="visually-hidden" role="navigation" aria-label="Skip to main content">Skip to main content</a>
-
 <!-- ─── Toast container ─── -->
-<div id="toast-container" role="region" aria-live="polite" aria-label="Notifications"></div>
+<div id="toast-container"></div>
 
 <!-- ─── Navbar ─── -->
-<nav id="navbar" role="navigation" aria-label="Main navigation">
+<nav id="navbar">
   <div class="container-xl d-flex align-items-center gap-3">
     <a class="navbar-brand me-4" href="#" onclick="navigate('home')">Sav<span>oria</span></a>
     <div class="d-none d-lg-flex gap-1 me-auto" id="navLinks">
@@ -909,8 +895,8 @@ footer {
       <a class="nav-link" onclick="navigate('orders')">Orders</a>
     </div>
     <div class="d-flex align-items-center gap-2 ms-auto">
-      <a class="nav-link cart-btn" onclick="navigate('cart')" id="cartNav" role="button" aria-label="Shopping cart" tabindex="0">
-        🛒 Cart <span class="cart-badge badge-pulse" id="cartBadge" style="display:none" aria-hidden="true">0</span>
+      <a class="nav-link cart-btn" onclick="navigate('cart')" id="cartNav">
+        🛒 Cart <span class="cart-badge badge-pulse" id="cartBadge" style="display:none">0</span>
       </a>
       <div id="authNav"></div>
     </div>
@@ -918,10 +904,10 @@ footer {
 </nav>
 
 <!-- ─── Pages ─── -->
-<main id="app" role="main"></main>
+<div id="app"></div>
 
 <!-- ─── Footer ─── -->
-<footer id="footer" role="contentinfo">
+<footer id="footer">
   <div class="container-xl">
     <div class="row g-4 mb-4">
       <div class="col-lg-4">
@@ -963,7 +949,7 @@ footer {
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-C6I1WlJMxe32oFmeQV2gkqxmW4O4xiuYv5TgzP41nUtMTByIq6E3V+HlmOt6nYrVRiE+LD8vsKL9FqWithXsPw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
 // ═══════════════════════════════════════
 // DATA & INITIALIZATION
@@ -976,73 +962,219 @@ const KEYS = {
 };
 
 function getLS(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; } }
-function setLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { console.error('Storage error:', e); } }
+function setLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
-// ─── Password hashing (simple, not for production auth) ───
-function simpleHash(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
+const DISH_IMAGES = [
+  'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80',
+  'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80',
+  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
+  'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
+  'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80',
+  'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80',
+  'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80',
+  'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80',
+  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80',
+  'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80',
+  'https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80',
+  'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&q=80',
+  'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=600&q=80',
+  'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80',
+  'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80',
+  'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80',
+  'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600&q=80',
+  'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80',
+  'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80',
+  'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&q=80',
+];
+
+function uuid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+function initData() {
+  if (!getLS(KEYS.users)) {
+    setLS(KEYS.users, [
+      { id: uuid(), name: 'Admin', email: 'admin@savoria.com', password: 'Admin@123', role: 'admin', phone: '1234567890', dob: '' }
+    ]);
   }
-  return 'hash_' + Math.abs(hash);
-}
-
-// ─── Security & Sanitization ───
-function sanitizeInput(str) {
-  if (!str) return '';
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(str).replace(/[&<>"']/g, m => map[m]);
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone) {
-  return /^[0-9\s\-\(\)\+]{7,}$/.test(phone);
-}
-
-// ─── Lazy loading images ───
-function lazyLoadImages() {
-  if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-            img.loading = 'lazy';
-          }
-          observer.unobserve(img);
-        }
-      });
-    }, { rootMargin: '50px' });
-    
-    document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+  if (!getLS(KEYS.categories)) {
+    setLS(KEYS.categories, [
+      { id: 'starters', name: 'Starters', icon: '🥗', desc: 'Light bites to whet your appetite' },
+      { id: 'soups', name: 'Soups', icon: '🍜', desc: 'Warm, comforting broths and bisques' },
+      { id: 'main', name: 'Main Course', icon: '🍽️', desc: 'Signature entrees and hearty mains' },
+      { id: 'grills', name: 'Grills', icon: '🥩', desc: 'Premium grilled meats and seafood' },
+      { id: 'desserts', name: 'Desserts', icon: '🍮', desc: 'Sweet finales to your meal' },
+      { id: 'beverages', name: 'Beverages', icon: '🥂', desc: 'Crafted drinks and fine wines' },
+    ]);
+  }
+  if (!getLS(KEYS.dishes)) {
+    const dishes = [
+      { id: uuid(), name: 'Truffle Burrata', image: DISH_IMAGES[0], category: 'starters', price: 18, originalPrice: 22, description: 'Creamy fresh burrata drizzled with white truffle oil, heirloom tomatoes, and micro basil.', ingredients: ['Fresh Burrata','White Truffle Oil','Heirloom Tomatoes','Micro Basil','Fleur de Sel'], allergens: ['Dairy'], calories: 320, prepTime: 12, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 124, badge: "Chef's Special", createdAt: Date.now()-86400000*5 },
+      { id: uuid(), name: 'Seared Scallop Trio', image: DISH_IMAGES[1], category: 'starters', price: 24, originalPrice: 28, description: 'Pan-seared diver scallops with cauliflower purée, crispy capers, and champagne beurre blanc.', ingredients: ['Diver Scallops','Cauliflower','Capers','Champagne','Butter'], allergens: ['Shellfish','Dairy'], calories: 280, prepTime: 15, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 89, badge: 'Popular', createdAt: Date.now()-86400000*3 },
+      { id: uuid(), name: 'Spiced Arancini', image: DISH_IMAGES[2], category: 'starters', price: 14, originalPrice: 14, description: 'Golden risotto balls filled with smoked mozzarella and porcini, served with tomato coulis.', ingredients: ['Arborio Rice','Porcini','Mozzarella','Panko','Tomato Coulis'], allergens: ['Gluten','Dairy'], calories: 420, prepTime: 20, isAvailable: true, isVegetarian: true, isSpicy: true, isFeatured: false, rating: 4.6, reviewCount: 67, badge: 'New', createdAt: Date.now()-86400000 },
+      { id: uuid(), name: 'Lobster Bisque', image: DISH_IMAGES[3], category: 'soups', price: 22, originalPrice: 22, description: 'Velvety lobster bisque with cognac cream, tarragon oil, and a whisper of cayenne.', ingredients: ['Lobster','Cream','Cognac','Tarragon','Cayenne'], allergens: ['Shellfish','Dairy'], calories: 380, prepTime: 25, isAvailable: true, isVegetarian: false, isSpicy: true, isFeatured: true, rating: 4.9, reviewCount: 201, badge: 'Popular', createdAt: Date.now()-86400000*10 },
+      { id: uuid(), name: 'Wild Mushroom Velouté', image: DISH_IMAGES[4], category: 'soups', price: 16, originalPrice: 18, description: 'Silken blend of forest mushrooms, thyme cream, and crispy shallots.', ingredients: ['Mixed Mushrooms','Shallots','Thyme','Heavy Cream','Truffle Oil'], allergens: ['Dairy'], calories: 290, prepTime: 18, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 55, badge: null, createdAt: Date.now()-86400000*7 },
+      { id: uuid(), name: 'French Onion Gratinée', image: DISH_IMAGES[5], category: 'soups', price: 15, originalPrice: 15, description: 'Classic caramelized onion soup crowned with a Gruyère-toasted crouton.', ingredients: ['Sweet Onions','Beef Stock','Gruyère','Baguette','Thyme'], allergens: ['Gluten','Dairy'], calories: 340, prepTime: 30, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.5, reviewCount: 78, badge: null, createdAt: Date.now()-86400000*14 },
+      { id: uuid(), name: 'Wagyu Tenderloin', image: DISH_IMAGES[6], category: 'main', price: 68, originalPrice: 75, description: 'A4 Wagyu tenderloin with truffle jus, roasted bone marrow, and pomme purée.', ingredients: ['A4 Wagyu Beef','Truffle','Bone Marrow','Potatoes','Red Wine'], allergens: ['Dairy'], calories: 820, prepTime: 35, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 5.0, reviewCount: 312, badge: "Chef's Special", createdAt: Date.now()-86400000*30 },
+      { id: uuid(), name: 'Saffron Risotto', image: DISH_IMAGES[7], category: 'main', price: 32, originalPrice: 32, description: 'Carnaroli rice with saffron, Parmigiano Reggiano, and roasted heirloom vegetables.', ingredients: ['Carnaroli Rice','Saffron','Parmigiano','Heirloom Veg','White Wine'], allergens: ['Dairy'], calories: 560, prepTime: 28, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 143, badge: null, createdAt: Date.now()-86400000*20 },
+      { id: uuid(), name: 'Roasted Sea Bass', image: DISH_IMAGES[8], category: 'main', price: 44, originalPrice: 48, description: 'Chilean sea bass with lemon-herb beurre blanc, asparagus, and crispy capers.', ingredients: ['Sea Bass','Lemon','Asparagus','Capers','Butter'], allergens: ['Fish','Dairy'], calories: 480, prepTime: 22, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 175, badge: 'Popular', createdAt: Date.now()-86400000*12 },
+      { id: uuid(), name: 'Duck Confit', image: DISH_IMAGES[9], category: 'main', price: 38, originalPrice: 42, description: 'Slow-cooked duck leg with cherry reduction, lentils du Puy, and crispy skin.', ingredients: ['Duck Leg','Duck Fat','Cherry','Lentils','Thyme'], allergens: [], calories: 680, prepTime: 40, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.6, reviewCount: 98, badge: null, createdAt: Date.now()-86400000*8 },
+      { id: uuid(), name: 'Tomahawk Ribeye', image: DISH_IMAGES[10], category: 'grills', price: 85, originalPrice: 95, description: '45-day dry-aged tomahawk with truffle butter, charred bone marrow, and grilled vegetables.', ingredients: ['Tomahawk Ribeye','Truffle Butter','Bone Marrow','Rosemary','Garlic'], allergens: ['Dairy'], calories: 1100, prepTime: 45, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 220, badge: 'Limited', createdAt: Date.now()-86400000*2 },
+      { id: uuid(), name: 'Grilled Lobster Tail', image: DISH_IMAGES[11], category: 'grills', price: 72, originalPrice: 80, description: 'Broiled Maine lobster tail with drawn butter, lemon, and tarragon.', ingredients: ['Maine Lobster','Butter','Lemon','Tarragon','Garlic'], allergens: ['Shellfish','Dairy'], calories: 420, prepTime: 30, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.8, reviewCount: 156, badge: "Chef's Special", createdAt: Date.now()-86400000*4 },
+      { id: uuid(), name: 'Harissa Lamb Chops', image: DISH_IMAGES[12], category: 'grills', price: 52, originalPrice: 58, description: 'Frenched lamb chops marinated in harissa with pomegranate glaze and tabbouleh.', ingredients: ['Lamb Chops','Harissa','Pomegranate','Parsley','Lemon'], allergens: [], calories: 720, prepTime: 35, isAvailable: true, isVegetarian: false, isSpicy: true, isFeatured: false, rating: 4.7, reviewCount: 88, badge: 'New', createdAt: Date.now()-86400000*1 },
+      { id: uuid(), name: 'Crème Brûlée', image: DISH_IMAGES[13], category: 'desserts', price: 14, originalPrice: 14, description: 'Classic vanilla bean custard with a caramelized sugar crust and fresh berries.', ingredients: ['Heavy Cream','Vanilla Bean','Egg Yolks','Sugar','Fresh Berries'], allergens: ['Dairy','Eggs'], calories: 460, prepTime: 10, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 289, badge: 'Popular', createdAt: Date.now()-86400000*60 },
+      { id: uuid(), name: 'Chocolate Fondant', image: DISH_IMAGES[14], category: 'desserts', price: 16, originalPrice: 18, description: 'Warm Valrhona chocolate lava cake with salted caramel ice cream.', ingredients: ['Valrhona Chocolate','Butter','Eggs','Flour','Caramel'], allergens: ['Dairy','Eggs','Gluten'], calories: 520, prepTime: 15, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 198, badge: "Chef's Special", createdAt: Date.now()-86400000*45 },
+      { id: uuid(), name: 'Mango Panna Cotta', image: DISH_IMAGES[15], category: 'desserts', price: 13, originalPrice: 13, description: 'Coconut panna cotta with Alphonso mango coulis and toasted coconut flakes.', ingredients: ['Coconut Cream','Gelatin','Mango','Lime','Coconut Flakes'], allergens: ['Dairy'], calories: 320, prepTime: 8, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.6, reviewCount: 112, badge: 'New', createdAt: Date.now()-86400000*2 },
+      { id: uuid(), name: 'Savoria Signature Cocktail', image: DISH_IMAGES[16], category: 'beverages', price: 18, originalPrice: 18, description: 'House blend of elderflower, champagne, and gold leaf garnish.', ingredients: ['Champagne','Elderflower Liqueur','Lemon','Gold Leaf','Mint'], allergens: ['Sulphites'], calories: 180, prepTime: 5, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 167, badge: "Chef's Special", createdAt: Date.now()-86400000*20 },
+      { id: uuid(), name: 'Cold Brew Nitro', image: DISH_IMAGES[17], category: 'beverages', price: 8, originalPrice: 8, description: 'Single-origin Ethiopian cold brew on nitro with vanilla cold foam.', ingredients: ['Ethiopian Coffee','Nitrogen','Vanilla','Heavy Cream'], allergens: ['Dairy'], calories: 90, prepTime: 3, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 234, badge: 'Popular', createdAt: Date.now()-86400000*10 },
+      { id: uuid(), name: 'Saffron Lassi', image: DISH_IMAGES[18], category: 'beverages', price: 9, originalPrice: 10, description: 'Chilled yogurt drink infused with saffron, cardamom, and rose water.', ingredients: ['Yogurt','Saffron','Cardamom','Rose Water','Pistachio'], allergens: ['Dairy'], calories: 145, prepTime: 4, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.5, reviewCount: 88, badge: null, createdAt: Date.now()-86400000*15 },
+      { id: uuid(), name: 'Wagyu Beef Sliders', image: DISH_IMAGES[19], category: 'starters', price: 28, originalPrice: 32, description: 'Mini Wagyu beef patties with aged cheddar, caramelized onion, and truffle aioli.', ingredients: ['Wagyu Beef','Aged Cheddar','Brioche Bun','Truffle Aioli','Arugula'], allergens: ['Gluten','Dairy'], calories: 580, prepTime: 18, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.8, reviewCount: 77, badge: 'Limited', createdAt: Date.now()-86400000*3 },
+    ];
+    setLS(KEYS.dishes, dishes);
+  }
+  if (!getLS(KEYS.cart)) setLS(KEYS.cart, []);
+  if (!getLS(KEYS.wishlist)) setLS(KEYS.wishlist, []);
+  if (!getLS(KEYS.orders)) setLS(KEYS.orders, []);
+  if (!getLS(KEYS.reservations)) setLS(KEYS.reservations, []);
+  if (!getLS(KEYS.promoCodes)) {
+    setLS(KEYS.promoCodes, [
+      { code: 'SAVORIA10', type: 'percent', value: 10, desc: '10% off your order' },
+      { code: 'WELCOME20', type: 'percent', value: 20, desc: '20% welcome discount' },
+      { code: 'FLAT15', type: 'flat', value: 15, desc: '$15 off' },
+    ]);
   }
 }
 
-// ─── Error handling ───
-window.addEventListener('error', (e) => {
-  console.error('App error:', e.message);
-  toast('An unexpected error occurred. Please try again.', 'danger');
-});
+// ═══════════════════════════════════════
+// STATE & HELPERS
+// ═══════════════════════════════════════
+let currentPage = 'home';
+let currentUser = null;
+let appliedPromo = null;
+let checkoutStep = 1;
+let orderType = 'delivery';
+let selectedTimeSlot = null;
+let adminSubPage = 'dashboard';
+let menuFilter = { cat: 'all', search: '', sort: 'popular', minPrice: 0, maxPrice: 200, veg: false, spicy: false };
+let viewMode = 'grid';
 
-window.addEventListener('unhandledrejection', (e) => {
-  console.error('Promise rejection:', e.reason);
-  toast('An error occurred. Please refresh and try again.', 'danger');
-});
+// ─── User-scoped cart & wishlist ───
+// Each user gets their own cart/wishlist so no data leaks between accounts
+function cartKey()     { const u = getLS(KEYS.currentUser); return u ? 'sv_cart_'     + u.id : null; }
+function wishlistKey() { const u = getLS(KEYS.currentUser); return u ? 'sv_wishlist_' + u.id : null; }
 
-// Document ready
-document.addEventListener('DOMContentLoaded', () => {
-  lazyLoadImages();
-  initData();
+function getCart()     { const k = cartKey();     return k ? (getLS(k) || []) : []; }
+function setCart(c)    { const k = cartKey();     if (k) setLS(k, c); updateCartBadge(); }
+function getWishlist() { const k = wishlistKey(); return k ? (getLS(k) || []) : []; }
+function setWishlist(w){ const k = wishlistKey(); if (k) setLS(k, w); }
+
+function getDishes()       { return getLS(KEYS.dishes)       || []; }
+function getOrders()       { return getLS(KEYS.orders)       || []; }
+function getReservations() { return getLS(KEYS.reservations) || []; }
+function getUsers()        { return getLS(KEYS.users)        || []; }
+function getCategories()   { return getLS(KEYS.categories)   || []; }
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  if (!badge) return;
+  if (!isLoggedIn()) { badge.style.display = 'none'; return; }
+  const total = getCart().reduce((s,i) => s + i.qty, 0);
+  if (total > 0) { badge.style.display = 'flex'; badge.textContent = total; badge.classList.add('badge-pulse'); }
+  else           { badge.style.display = 'none';  badge.classList.remove('badge-pulse'); }
+}
+
+function addToCart(dishId, qty = 1) {
+  // Auth guard
+  if (!isLoggedIn()) {
+    window._redirectAfterLogin = { page: 'cart', extra: null };
+    toast('Please login to add items to cart 🔒', 'danger');
+    setTimeout(() => showAuthWall('cart'), 800);
+    return;
+  }
+  const dishes = getDishes();
+  const dish = dishes.find(d => d.id === dishId);
+  if (!dish) return;
+  let cart = getCart();
+  const ex = cart.find(i => i.dishId === dishId);
+  if (ex) ex.qty += qty;
+  else cart.push({ dishId, qty, notes: '', addedAt: Date.now() });
+  setCart(cart);
+  toast(`${dish.name} added to cart 🛒`);
+}
+
+function toggleWishlist(dishId) {
+  // Auth guard
+  if (!isLoggedIn()) {
+    window._redirectAfterLogin = { page: 'profile', extra: null };
+    toast('Please login to save to wishlist 🔒', 'danger');
+    setTimeout(() => showAuthWall('profile'), 800);
+    return;
+  }
+  let wl = getWishlist();
+  const idx = wl.indexOf(dishId);
+  if (idx >= 0) { wl.splice(idx,1); toast('Removed from wishlist'); }
+  else { wl.push(dishId); toast('Added to wishlist ❤️'); }
+  setWishlist(wl);
+}
+
+function isInWishlist(dishId) { return (getWishlist()).includes(dishId); }
+
+function starsHTML(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let s = '';
+  for (let i = 0; i < 5; i++) {
+    if (i < full) s += '★';
+    else if (i === full && half) s += '★';
+    else s += '☆';
+  }
+  return `<span class="stars">${s}</span> <span style="color:var(--text-muted);font-size:0.8rem">${rating}</span>`;
+}
+
+function badgeHTML(badge) {
+  if (!badge) return '';
+  const cls = { "Chef's Special": 'badge-chef', 'New': 'badge-new', 'Popular': 'badge-popular', 'Limited': 'badge-limited' };
+  return `<span class="badge-dish ${cls[badge]||'badge-new'}">${badge}</span>`;
+}
+
+function formatCurrency(n) { return `$${(+n).toFixed(2)}`; }
+
+function formatDate(ts) {
+  return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ─── Toast ───
+function toast(msg, type = 'default') {
+  const tc = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast-item ${type}`;
+  el.innerHTML = `<div style="font-size:0.9rem;color:var(--text-main)">${msg}</div><div class="toast-progress"></div>`;
+  tc.appendChild(el);
+  setTimeout(() => { el.style.animation = 'slideOutRight 0.4s ease forwards'; setTimeout(() => el.remove(), 400); }, 3000);
+}
+
+// ─── Auth ───
+function updateAuthNav() {
+  currentUser = getLS(KEYS.currentUser);
+  const nav = document.getElementById('authNav');
+  if (!nav) return;
+  if (currentUser) {
+    nav.innerHTML = `
+      <div class="d-flex align-items-center gap-2">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(200,151,42,0.2);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--primary);font-weight:700;font-size:0.9rem" onclick="navigate('profile')" title="${currentUser.name}">${currentUser.name[0].toUpperCase()}</div>
+        ${currentUser.role==='admin'?`<button class="btn-outline-gold btn-sm-gold" onclick="navigate('admin')">Admin</button>`:''}
+        <button class="btn-outline-gold btn-sm-gold" onclick="logout()">Logout</button>
+      </div>`;
+  } else {
+    nav.innerHTML = `<button class="btn-gold btn-sm-gold" onclick="navigate('login')">Login</button>`;
+  }
+}
+
+function logout() {
+  localStorage.removeItem(KEYS.currentUser);
+  currentUser = null;
   updateAuthNav();
   navigate('home');
-});
+  toast('Logged out successfully');
+}
 
 // ─── Auth Guard ───
 // Pages that require login to access
@@ -2638,31 +2770,10 @@ window.addEventListener('scroll', () => {
   if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ─── Security & Sanitization ───
-function sanitizeInput(str) {
-  if (!str) return '';
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(str).replace(/[&<>"']/g, m => map[m]);
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone) {
-  return /^[0-9\s\-\(\)\+]{7,}$/.test(phone);
-}
-
-// ─── Error handling ───
-window.addEventListener('error', (e) => {
-  console.error('App error:', e.message);
-  toast('An unexpected error occurred. Please try again.', 'danger');
-});
-
-window.addEventListener('unhandledrejection', (e) => {
-  console.error('Promise rejection:', e.reason);
-  toast('An error occurred. Please refresh and try again.', 'danger');
-});
+// ─── Init ───
+initData();
+updateAuthNav();
+navigate('home');
 </script>
 </body>
 </html>
