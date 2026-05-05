@@ -1,0 +1,2779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savoria – Fine Dining Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+<style>
+:root {
+  --primary: #C8972A;
+  --secondary: #1A0A00;
+  --accent: #E85D26;
+  --surface: #0F0800;
+  --card: #1E1008;
+  --text-main: #F5EDD6;
+  --text-muted: #A89070;
+  --success: #4CAF7D;
+  --danger: #E53935;
+  --overlay: rgba(10,4,0,0.85);
+  --gold-gradient: linear-gradient(135deg, #C8972A, #E8C060, #C8972A);
+  --card-border: rgba(200,151,42,0.15);
+  --card-hover-border: rgba(200,151,42,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--surface);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,h2,h3,h4,h5,h6 { font-family: 'Cormorant Garamond', serif; }
+
+.script { font-family: 'Great Vibes', cursive; }
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+/* ─── Navbar ─── */
+#navbar {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  transition: all 0.4s ease;
+  padding: 18px 0;
+}
+#navbar.scrolled {
+  background: rgba(15,8,0,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  padding: 10px 0;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+.navbar-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary) !important;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+.navbar-brand span { color: var(--text-main); }
+.nav-link {
+  color: var(--text-muted) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 6px 14px !important;
+  position: relative;
+  transition: color 0.3s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 14px;
+  width: 0; height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+.nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+.nav-link:hover::after, .nav-link.active::after { width: calc(100% - 28px); }
+
+/* Cart icon badge */
+.cart-btn {
+  position: relative;
+  background: rgba(200,151,42,0.15);
+  border: 1px solid var(--card-border);
+  color: var(--primary) !important;
+  padding: 8px 18px !important;
+  border-radius: 50px;
+  transition: all 0.3s;
+}
+.cart-btn:hover { background: rgba(200,151,42,0.25) !important; }
+.cart-badge {
+  position: absolute; top: -6px; right: -6px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  animation: bounce 0.4s ease;
+}
+@keyframes bounce {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+}
+.badge-pulse { animation: pulse-gold 2s infinite; }
+@keyframes pulse-gold {
+  0%,100% { box-shadow: 0 0 0 0 rgba(200,151,42,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(200,151,42,0); }
+}
+
+/* ─── Buttons ─── */
+.btn-gold {
+  background: var(--gold-gradient);
+  color: #0F0800;
+  font-weight: 700;
+  font-family: 'Jost', sans-serif;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 32px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.5s ease;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(200,151,42,0.4); }
+.btn-gold:hover::before { left: 100%; }
+.btn-gold:active { transform: translateY(0); }
+
+.btn-outline-gold {
+  background: transparent;
+  color: var(--primary);
+  font-weight: 600;
+  font-family: 'Jost', sans-serif;
+  border: 1px solid var(--primary);
+  border-radius: 50px;
+  padding: 12px 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline-gold:hover {
+  background: rgba(200,151,42,0.15);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.btn-sm-gold { padding: 7px 18px; font-size: 0.85rem; }
+
+/* ─── Cards ─── */
+.dish-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  cursor: pointer;
+  position: relative;
+}
+.dish-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--card-hover-border);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(200,151,42,0.1);
+}
+.dish-card .card-img {
+  width: 100%; height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.dish-card:hover .card-img { transform: scale(1.06); }
+.dish-card .img-wrap { overflow: hidden; position: relative; }
+.dish-card .img-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(15,8,0,0.9) 0%, transparent 100%);
+  padding: 14px;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  display: flex; justify-content: flex-end;
+}
+.dish-card:hover .img-overlay { transform: translateY(0); }
+.dish-card .card-body { padding: 16px; }
+.dish-card .badge-dish {
+  font-size: 0.72rem;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 50px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.badge-chef { background: rgba(200,151,42,0.2); color: var(--primary); border: 1px solid rgba(200,151,42,0.3); }
+.badge-new { background: rgba(78,205,196,0.15); color: #4ECDC4; border: 1px solid rgba(78,205,196,0.3); }
+.badge-popular { background: rgba(232,93,38,0.15); color: var(--accent); border: 1px solid rgba(232,93,38,0.3); }
+.badge-limited { background: rgba(229,57,53,0.15); color: #ff6b6b; border: 1px solid rgba(229,57,53,0.3); }
+
+.stars { color: #E8C060; font-size: 0.85rem; }
+.price-main { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+.price-old { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; }
+
+/* ─── Hero ─── */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0F0800 0%, #1A0A00 50%, #0F0500 100%);
+  display: flex; align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80') center/cover no-repeat;
+  opacity: 0.18;
+}
+#hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, rgba(200,151,42,0.08) 0%, transparent 70%);
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-script { font-size: 2.2rem; color: var(--primary); opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+.hero-title {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+}
+.hero-title strong { color: var(--primary); font-weight: 700; }
+.hero-sub {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 480px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+}
+.hero-btns { opacity: 0; animation: fadeUp 0.8s ease 1.1s forwards; }
+.hero-stats { opacity: 0; animation: fadeUp 0.8s ease 1.4s forwards; }
+.hero-stat-num { font-size: 2.2rem; font-family: 'Cormorant Garamond', serif; font-weight: 700; color: var(--primary); }
+.hero-stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.hero-img-side {
+  position: relative; z-index: 2;
+  opacity: 0; animation: fadeLeft 0.9s ease 0.6s forwards;
+}
+.hero-img-main {
+  width: 100%; max-width: 520px;
+  border-radius: 24px;
+  border: 2px solid rgba(200,151,42,0.3);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(200,151,42,0.1);
+}
+.hero-float-card {
+  position: absolute;
+  background: rgba(30,16,8,0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+.hero-float-1 { bottom: 40px; left: -20px; }
+.hero-float-2 { top: 60px; right: -20px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeLeft { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+
+/* ─── Section styles ─── */
+.section-badge {
+  display: inline-block;
+  background: rgba(200,151,42,0.1);
+  border: 1px solid rgba(200,151,42,0.3);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 5px 16px;
+  border-radius: 50px;
+  margin-bottom: 12px;
+}
+.section-title { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; }
+.section-title strong { color: var(--primary); font-weight: 700; }
+.divider {
+  width: 60px; height: 2px;
+  background: var(--gold-gradient);
+  margin: 16px auto;
+  border-radius: 2px;
+}
+
+/* ─── Category Tabs ─── */
+.cat-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  position: relative;
+}
+.cat-tabs::-webkit-scrollbar { display: none; }
+.cat-tab {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  padding: 9px 22px;
+  border-radius: 50px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.cat-tab:hover { border-color: var(--primary); color: var(--primary); }
+.cat-tab.active {
+  background: var(--gold-gradient);
+  color: #0F0800;
+  font-weight: 700;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(200,151,42,0.3);
+}
+
+/* ─── Toast ─── */
+#toast-container {
+  position: fixed; top: 80px; right: 20px;
+  z-index: 9999;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.toast-item {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--primary);
+  border-radius: 10px;
+  padding: 14px 18px;
+  min-width: 280px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  animation: slideInRight 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.toast-item.danger { border-left-color: var(--danger); }
+.toast-item.success { border-left-color: var(--success); }
+.toast-progress {
+  position: absolute; bottom: 0; left: 0;
+  height: 3px; background: var(--primary);
+  animation: toastProgress 3s linear forwards;
+}
+.toast-item.danger .toast-progress { background: var(--danger); }
+.toast-item.success .toast-progress { background: var(--success); }
+@keyframes slideInRight { from { opacity:0; transform:translateX(100%); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideOutRight { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(100%); } }
+@keyframes toastProgress { from { width:100%; } to { width:0; } }
+
+/* ─── Modal ─── */
+.modal-backdrop-custom {
+  position: fixed; inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; animation: fadeIn 0.3s ease forwards;
+}
+.modal-box {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  width: 90%; max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  animation: scaleIn 0.3s ease;
+  position: relative;
+}
+.modal-box::-webkit-scrollbar { width: 4px; }
+.modal-box::-webkit-scrollbar-thumb { background: var(--primary); }
+@keyframes fadeIn { to { opacity:1; } }
+@keyframes scaleIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(200,151,42,0.1);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: rgba(229,57,53,0.2); color: var(--danger); }
+
+/* ─── Form inputs ─── */
+.form-control-gold {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+.form-control-gold:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200,151,42,0.1);
+  background: rgba(200,151,42,0.04);
+  color: var(--text-main);
+}
+.form-control-gold::placeholder { color: var(--text-muted); }
+.form-control-gold option { background: var(--card); color: var(--text-main); }
+.form-label-gold { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px; margin-bottom: 6px; display: block; }
+.form-error { color: var(--danger); font-size: 0.8rem; margin-top: 4px; }
+
+/* ─── Page system ─── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── Skeleton ─── */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+
+/* ─── Order timeline ─── */
+.timeline-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  position: relative;
+}
+.timeline-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--card-border);
+  background: var(--card);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.timeline-dot.done { background: var(--success); border-color: var(--success); }
+.timeline-dot.current {
+  background: var(--primary); border-color: var(--primary);
+  animation: pulse-gold 1.5s infinite;
+}
+.timeline-line {
+  position: absolute; left: 8px; top: 28px;
+  width: 2px; height: calc(100% - 18px);
+  background: var(--card-border);
+}
+.timeline-line.done { background: var(--success); }
+
+/* ─── Switch ─── */
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* ─── Progress bar (checkout) ─── */
+.checkout-steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.checkout-step {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1;
+}
+.step-num {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.step-num.active { background: var(--primary); border-color: var(--primary); color: #0F0800; }
+.step-num.done { background: var(--success); border-color: var(--success); color: #fff; }
+.step-label { font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; }
+.step-label.active { color: var(--primary); font-weight: 600; }
+.step-line { flex: 1; height: 2px; background: var(--card-border); margin: 0 8px; }
+.step-line.done { background: var(--success); }
+
+/* ─── Landing sections ─── */
+.features-grid .feat-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 32px 24px;
+  transition: all 0.3s;
+  height: 100%;
+}
+.features-grid .feat-card:hover {
+  border-color: var(--card-hover-border);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+.feat-icon {
+  width: 56px; height: 56px;
+  background: rgba(200,151,42,0.1);
+  border: 1px solid rgba(200,151,42,0.2);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 28px;
+  transition: all 0.3s;
+}
+.testimonial-card:hover { border-color: var(--card-hover-border); }
+
+/* ─── Admin sidebar ─── */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 70px;
+}
+.admin-sidebar {
+  width: 240px;
+  background: var(--card);
+  border-right: 1px solid var(--card-border);
+  padding: 24px 0;
+  position: fixed;
+  top: 70px; left: 0;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  z-index: 100;
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+.sidebar-link:hover { color: var(--primary); background: rgba(200,151,42,0.06); }
+.sidebar-link.active { color: var(--primary); background: rgba(200,151,42,0.08); border-left-color: var(--primary); }
+.admin-main { margin-left: 240px; flex: 1; padding: 28px; }
+
+/* ─── Tables ─── */
+.table-gold {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.table-gold th {
+  background: rgba(200,151,42,0.08);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+}
+.table-gold td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(200,151,42,0.07);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+.table-gold tr:hover td { background: rgba(200,151,42,0.03); }
+
+/* ─── Status badges ─── */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 50px;
+  text-transform: capitalize;
+}
+.status-pending { background: rgba(255,193,7,0.15); color: #ffc107; }
+.status-confirmed { background: rgba(76,175,125,0.15); color: var(--success); }
+.status-preparing { background: rgba(200,151,42,0.15); color: var(--primary); }
+.status-ready { background: rgba(78,205,196,0.15); color: #4ECDC4; }
+.status-delivered { background: rgba(76,175,125,0.15); color: var(--success); }
+.status-cancelled { background: rgba(229,57,53,0.15); color: var(--danger); }
+.status-rejected { background: rgba(229,57,53,0.15); color: var(--danger); }
+
+/* ─── Filter sidebar ─── */
+.filter-sidebar {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 24px;
+  position: sticky;
+  top: 88px;
+}
+.filter-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 600; margin-bottom: 14px; }
+
+/* ─── Price range ─── */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 3px;
+  background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, rgba(255,255,255,0.1) 50%);
+  border-radius: 3px;
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(200,151,42,0.5);
+}
+
+/* ─── Stat cards ─── */
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s;
+}
+.stat-card:hover { border-color: var(--card-hover-border); transform: translateY(-2px); }
+.stat-num { font-size: 2.4rem; font-family: 'Cormorant Garamond', serif; font-weight: 700; color: var(--primary); }
+
+/* ─── Promo code ─── */
+.promo-input-wrap { display: flex; gap: 8px; }
+.promo-input-wrap input { flex: 1; }
+
+/* ─── Empty state ─── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 4rem; margin-bottom: 16px; opacity: 0.4; }
+
+/* ─── Reservation time slots ─── */
+.time-slots { display: flex; flex-wrap: wrap; gap: 8px; }
+.time-slot {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.time-slot:hover { border-color: var(--primary); color: var(--primary); }
+.time-slot.selected { background: rgba(200,151,42,0.15); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+.time-slot.unavailable { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+
+/* ─── Scroll reveal ─── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .admin-sidebar { display: none; }
+  .admin-main { margin-left: 0; padding: 16px; }
+  .hero-img-side { display: none; }
+  .filter-sidebar { position: static; margin-bottom: 20px; }
+}
+
+/* ─── Quantity selector ─── */
+.qty-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(200,151,42,0.15);
+  border: 1px solid var(--card-border);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.qty-btn:hover { background: rgba(200,151,42,0.3); }
+.qty-display { min-width: 32px; text-align: center; font-weight: 600; }
+
+/* ─── Success screen ─── */
+.success-screen {
+  text-align: center;
+  padding: 60px 20px;
+}
+.success-icon {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: rgba(76,175,125,0.15);
+  border: 2px solid var(--success);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 2.5rem;
+  animation: scaleIn 0.5s ease;
+}
+
+/* Section padding */
+.section-py { padding: 80px 0; }
+.section-py-sm { padding: 50px 0; }
+
+/* Chart canvas */
+#revenueChart { max-height: 200px; }
+
+/* Loyalty points */
+.loyalty-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.loyalty-fill {
+  height: 100%;
+  background: var(--gold-gradient);
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+/* Footer */
+footer {
+  background: var(--card);
+  border-top: 1px solid var(--card-border);
+  padding: 60px 0 24px;
+}
+.footer-brand { font-size: 1.8rem; color: var(--primary); }
+.social-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(200,151,42,0.1);
+  border: 1px solid var(--card-border);
+  color: var(--primary);
+  display: inline-flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  margin-right: 8px;
+}
+.social-btn:hover { background: rgba(200,151,42,0.25); color: var(--primary); }
+.footer-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 8px; transition: color 0.2s; }
+.footer-link:hover { color: var(--primary); }
+
+/* Search bar */
+.search-wrap { position: relative; }
+.search-wrap input { padding-left: 42px; }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem; pointer-events: none; }
+
+/* Wishlist heart */
+.wish-btn {
+  background: rgba(229,57,53,0.1);
+  border: 1px solid rgba(229,57,53,0.2);
+  color: #ff6b6b;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.wish-btn:hover { background: rgba(229,57,53,0.2); transform: scale(1.1); }
+.wish-btn.active { background: rgba(229,57,53,0.3); color: var(--danger); }
+
+/* How it works steps */
+.how-step { text-align: center; }
+.how-num {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(200,151,42,0.1);
+  border: 2px solid rgba(200,151,42,0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 1.8rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Img placeholder */
+.img-placeholder {
+  width: 100%; height: 200px;
+  background: linear-gradient(135deg, #1E1008, #2a1408);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 2rem;
+}
+
+/* ─── Auth Wall ─── */
+.auth-wall-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(200,151,42,0.1);
+  border: 2px solid rgba(200,151,42,0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 2rem;
+  animation: pulse-gold 2s infinite;
+}
+
+/* Inline flag */
+.veg-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #4CAF7D;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.veg-dot::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4CAF7D;
+}
+.spicy-icon { color: #ff4444; font-size: 0.9rem; }
+
+/* action icon btn */
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(200,151,42,0.1);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+.icon-btn:hover { background: rgba(200,151,42,0.2); color: var(--primary); }
+.icon-btn.danger:hover { background: rgba(229,57,53,0.15); color: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- ─── Toast container ─── -->
+<div id="toast-container"></div>
+
+<!-- ─── Navbar ─── -->
+<nav id="navbar">
+  <div class="container-xl d-flex align-items-center gap-3">
+    <a class="navbar-brand me-4" href="#" onclick="navigate('home')">Sav<span>oria</span></a>
+    <div class="d-none d-lg-flex gap-1 me-auto" id="navLinks">
+      <a class="nav-link" onclick="navigate('menu')">Menu</a>
+      <a class="nav-link" onclick="navigate('reservations')">Reservations</a>
+      <a class="nav-link" onclick="navigate('orders')">Orders</a>
+    </div>
+    <div class="d-flex align-items-center gap-2 ms-auto">
+      <a class="nav-link cart-btn" onclick="navigate('cart')" id="cartNav">
+        🛒 Cart <span class="cart-badge badge-pulse" id="cartBadge" style="display:none">0</span>
+      </a>
+      <div id="authNav"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Pages ─── -->
+<div id="app"></div>
+
+<!-- ─── Footer ─── -->
+<footer id="footer">
+  <div class="container-xl">
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="footer-brand mb-2" style="font-family:'Cormorant Garamond',serif;font-weight:700">Savoria</div>
+        <div class="script" style="color:var(--primary);font-size:1.2rem">Fine Dining Experience</div>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-top:12px;max-width:280px">Where culinary artistry meets timeless elegance. Every dish tells a story.</p>
+        <div class="mt-3">
+          <a href="#" class="social-btn">f</a>
+          <a href="#" class="social-btn">in</a>
+          <a href="#" class="social-btn">ig</a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="filter-title mb-3">Explore</div>
+        <a class="footer-link" onclick="navigate('menu')">Our Menu</a>
+        <a class="footer-link" onclick="navigate('reservations')">Reservations</a>
+        <a class="footer-link" onclick="navigate('orders')">Track Order</a>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="filter-title mb-3">Account</div>
+        <a class="footer-link" onclick="navigate('login')">Login</a>
+        <a class="footer-link" onclick="navigate('register')">Register</a>
+        <a class="footer-link" onclick="navigate('profile')">Profile</a>
+      </div>
+      <div class="col-lg-4">
+        <div class="filter-title mb-3">Newsletter</div>
+        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:12px">Get exclusive offers and new dish announcements.</p>
+        <div class="d-flex gap-2">
+          <input class="form-control-gold flex-1" type="email" placeholder="Your email address" style="flex:1">
+          <button class="btn-gold btn-sm-gold">Join</button>
+        </div>
+      </div>
+    </div>
+    <hr style="border-color:var(--card-border)">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2" style="font-size:0.82rem;color:var(--text-muted)">
+      <div>© 2025 Savoria. All rights reserved.</div>
+      <div>Crafted with passion 🥂</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+// ═══════════════════════════════════════
+// DATA & INITIALIZATION
+// ═══════════════════════════════════════
+
+const KEYS = {
+  users: 'sv_users', dishes: 'sv_dishes', categories: 'sv_categories',
+  orders: 'sv_orders', reservations: 'sv_reservations', cart: 'sv_cart',
+  wishlist: 'sv_wishlist', currentUser: 'sv_currentUser', promoCodes: 'sv_promoCodes'
+};
+
+function getLS(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; } }
+function setLS(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+const DISH_IMAGES = [
+  'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80',
+  'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80',
+  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
+  'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
+  'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80',
+  'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80',
+  'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80',
+  'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80',
+  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80',
+  'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80',
+  'https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80',
+  'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&q=80',
+  'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=600&q=80',
+  'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80',
+  'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80',
+  'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80',
+  'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600&q=80',
+  'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80',
+  'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80',
+  'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&q=80',
+];
+
+function uuid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+function initData() {
+  if (!getLS(KEYS.users)) {
+    setLS(KEYS.users, [
+      { id: uuid(), name: 'Admin', email: 'admin@savoria.com', password: 'Admin@123', role: 'admin', phone: '1234567890', dob: '' }
+    ]);
+  }
+  if (!getLS(KEYS.categories)) {
+    setLS(KEYS.categories, [
+      { id: 'starters', name: 'Starters', icon: '🥗', desc: 'Light bites to whet your appetite' },
+      { id: 'soups', name: 'Soups', icon: '🍜', desc: 'Warm, comforting broths and bisques' },
+      { id: 'main', name: 'Main Course', icon: '🍽️', desc: 'Signature entrees and hearty mains' },
+      { id: 'grills', name: 'Grills', icon: '🥩', desc: 'Premium grilled meats and seafood' },
+      { id: 'desserts', name: 'Desserts', icon: '🍮', desc: 'Sweet finales to your meal' },
+      { id: 'beverages', name: 'Beverages', icon: '🥂', desc: 'Crafted drinks and fine wines' },
+    ]);
+  }
+  if (!getLS(KEYS.dishes)) {
+    const dishes = [
+      { id: uuid(), name: 'Truffle Burrata', image: DISH_IMAGES[0], category: 'starters', price: 18, originalPrice: 22, description: 'Creamy fresh burrata drizzled with white truffle oil, heirloom tomatoes, and micro basil.', ingredients: ['Fresh Burrata','White Truffle Oil','Heirloom Tomatoes','Micro Basil','Fleur de Sel'], allergens: ['Dairy'], calories: 320, prepTime: 12, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 124, badge: "Chef's Special", createdAt: Date.now()-86400000*5 },
+      { id: uuid(), name: 'Seared Scallop Trio', image: DISH_IMAGES[1], category: 'starters', price: 24, originalPrice: 28, description: 'Pan-seared diver scallops with cauliflower purée, crispy capers, and champagne beurre blanc.', ingredients: ['Diver Scallops','Cauliflower','Capers','Champagne','Butter'], allergens: ['Shellfish','Dairy'], calories: 280, prepTime: 15, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 89, badge: 'Popular', createdAt: Date.now()-86400000*3 },
+      { id: uuid(), name: 'Spiced Arancini', image: DISH_IMAGES[2], category: 'starters', price: 14, originalPrice: 14, description: 'Golden risotto balls filled with smoked mozzarella and porcini, served with tomato coulis.', ingredients: ['Arborio Rice','Porcini','Mozzarella','Panko','Tomato Coulis'], allergens: ['Gluten','Dairy'], calories: 420, prepTime: 20, isAvailable: true, isVegetarian: true, isSpicy: true, isFeatured: false, rating: 4.6, reviewCount: 67, badge: 'New', createdAt: Date.now()-86400000 },
+      { id: uuid(), name: 'Lobster Bisque', image: DISH_IMAGES[3], category: 'soups', price: 22, originalPrice: 22, description: 'Velvety lobster bisque with cognac cream, tarragon oil, and a whisper of cayenne.', ingredients: ['Lobster','Cream','Cognac','Tarragon','Cayenne'], allergens: ['Shellfish','Dairy'], calories: 380, prepTime: 25, isAvailable: true, isVegetarian: false, isSpicy: true, isFeatured: true, rating: 4.9, reviewCount: 201, badge: 'Popular', createdAt: Date.now()-86400000*10 },
+      { id: uuid(), name: 'Wild Mushroom Velouté', image: DISH_IMAGES[4], category: 'soups', price: 16, originalPrice: 18, description: 'Silken blend of forest mushrooms, thyme cream, and crispy shallots.', ingredients: ['Mixed Mushrooms','Shallots','Thyme','Heavy Cream','Truffle Oil'], allergens: ['Dairy'], calories: 290, prepTime: 18, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 55, badge: null, createdAt: Date.now()-86400000*7 },
+      { id: uuid(), name: 'French Onion Gratinée', image: DISH_IMAGES[5], category: 'soups', price: 15, originalPrice: 15, description: 'Classic caramelized onion soup crowned with a Gruyère-toasted crouton.', ingredients: ['Sweet Onions','Beef Stock','Gruyère','Baguette','Thyme'], allergens: ['Gluten','Dairy'], calories: 340, prepTime: 30, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.5, reviewCount: 78, badge: null, createdAt: Date.now()-86400000*14 },
+      { id: uuid(), name: 'Wagyu Tenderloin', image: DISH_IMAGES[6], category: 'main', price: 68, originalPrice: 75, description: 'A4 Wagyu tenderloin with truffle jus, roasted bone marrow, and pomme purée.', ingredients: ['A4 Wagyu Beef','Truffle','Bone Marrow','Potatoes','Red Wine'], allergens: ['Dairy'], calories: 820, prepTime: 35, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 5.0, reviewCount: 312, badge: "Chef's Special", createdAt: Date.now()-86400000*30 },
+      { id: uuid(), name: 'Saffron Risotto', image: DISH_IMAGES[7], category: 'main', price: 32, originalPrice: 32, description: 'Carnaroli rice with saffron, Parmigiano Reggiano, and roasted heirloom vegetables.', ingredients: ['Carnaroli Rice','Saffron','Parmigiano','Heirloom Veg','White Wine'], allergens: ['Dairy'], calories: 560, prepTime: 28, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 143, badge: null, createdAt: Date.now()-86400000*20 },
+      { id: uuid(), name: 'Roasted Sea Bass', image: DISH_IMAGES[8], category: 'main', price: 44, originalPrice: 48, description: 'Chilean sea bass with lemon-herb beurre blanc, asparagus, and crispy capers.', ingredients: ['Sea Bass','Lemon','Asparagus','Capers','Butter'], allergens: ['Fish','Dairy'], calories: 480, prepTime: 22, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 175, badge: 'Popular', createdAt: Date.now()-86400000*12 },
+      { id: uuid(), name: 'Duck Confit', image: DISH_IMAGES[9], category: 'main', price: 38, originalPrice: 42, description: 'Slow-cooked duck leg with cherry reduction, lentils du Puy, and crispy skin.', ingredients: ['Duck Leg','Duck Fat','Cherry','Lentils','Thyme'], allergens: [], calories: 680, prepTime: 40, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.6, reviewCount: 98, badge: null, createdAt: Date.now()-86400000*8 },
+      { id: uuid(), name: 'Tomahawk Ribeye', image: DISH_IMAGES[10], category: 'grills', price: 85, originalPrice: 95, description: '45-day dry-aged tomahawk with truffle butter, charred bone marrow, and grilled vegetables.', ingredients: ['Tomahawk Ribeye','Truffle Butter','Bone Marrow','Rosemary','Garlic'], allergens: ['Dairy'], calories: 1100, prepTime: 45, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 220, badge: 'Limited', createdAt: Date.now()-86400000*2 },
+      { id: uuid(), name: 'Grilled Lobster Tail', image: DISH_IMAGES[11], category: 'grills', price: 72, originalPrice: 80, description: 'Broiled Maine lobster tail with drawn butter, lemon, and tarragon.', ingredients: ['Maine Lobster','Butter','Lemon','Tarragon','Garlic'], allergens: ['Shellfish','Dairy'], calories: 420, prepTime: 30, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.8, reviewCount: 156, badge: "Chef's Special", createdAt: Date.now()-86400000*4 },
+      { id: uuid(), name: 'Harissa Lamb Chops', image: DISH_IMAGES[12], category: 'grills', price: 52, originalPrice: 58, description: 'Frenched lamb chops marinated in harissa with pomegranate glaze and tabbouleh.', ingredients: ['Lamb Chops','Harissa','Pomegranate','Parsley','Lemon'], allergens: [], calories: 720, prepTime: 35, isAvailable: true, isVegetarian: false, isSpicy: true, isFeatured: false, rating: 4.7, reviewCount: 88, badge: 'New', createdAt: Date.now()-86400000*1 },
+      { id: uuid(), name: 'Crème Brûlée', image: DISH_IMAGES[13], category: 'desserts', price: 14, originalPrice: 14, description: 'Classic vanilla bean custard with a caramelized sugar crust and fresh berries.', ingredients: ['Heavy Cream','Vanilla Bean','Egg Yolks','Sugar','Fresh Berries'], allergens: ['Dairy','Eggs'], calories: 460, prepTime: 10, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 289, badge: 'Popular', createdAt: Date.now()-86400000*60 },
+      { id: uuid(), name: 'Chocolate Fondant', image: DISH_IMAGES[14], category: 'desserts', price: 16, originalPrice: 18, description: 'Warm Valrhona chocolate lava cake with salted caramel ice cream.', ingredients: ['Valrhona Chocolate','Butter','Eggs','Flour','Caramel'], allergens: ['Dairy','Eggs','Gluten'], calories: 520, prepTime: 15, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.8, reviewCount: 198, badge: "Chef's Special", createdAt: Date.now()-86400000*45 },
+      { id: uuid(), name: 'Mango Panna Cotta', image: DISH_IMAGES[15], category: 'desserts', price: 13, originalPrice: 13, description: 'Coconut panna cotta with Alphonso mango coulis and toasted coconut flakes.', ingredients: ['Coconut Cream','Gelatin','Mango','Lime','Coconut Flakes'], allergens: ['Dairy'], calories: 320, prepTime: 8, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.6, reviewCount: 112, badge: 'New', createdAt: Date.now()-86400000*2 },
+      { id: uuid(), name: 'Savoria Signature Cocktail', image: DISH_IMAGES[16], category: 'beverages', price: 18, originalPrice: 18, description: 'House blend of elderflower, champagne, and gold leaf garnish.', ingredients: ['Champagne','Elderflower Liqueur','Lemon','Gold Leaf','Mint'], allergens: ['Sulphites'], calories: 180, prepTime: 5, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: true, rating: 4.9, reviewCount: 167, badge: "Chef's Special", createdAt: Date.now()-86400000*20 },
+      { id: uuid(), name: 'Cold Brew Nitro', image: DISH_IMAGES[17], category: 'beverages', price: 8, originalPrice: 8, description: 'Single-origin Ethiopian cold brew on nitro with vanilla cold foam.', ingredients: ['Ethiopian Coffee','Nitrogen','Vanilla','Heavy Cream'], allergens: ['Dairy'], calories: 90, prepTime: 3, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.7, reviewCount: 234, badge: 'Popular', createdAt: Date.now()-86400000*10 },
+      { id: uuid(), name: 'Saffron Lassi', image: DISH_IMAGES[18], category: 'beverages', price: 9, originalPrice: 10, description: 'Chilled yogurt drink infused with saffron, cardamom, and rose water.', ingredients: ['Yogurt','Saffron','Cardamom','Rose Water','Pistachio'], allergens: ['Dairy'], calories: 145, prepTime: 4, isAvailable: true, isVegetarian: true, isSpicy: false, isFeatured: false, rating: 4.5, reviewCount: 88, badge: null, createdAt: Date.now()-86400000*15 },
+      { id: uuid(), name: 'Wagyu Beef Sliders', image: DISH_IMAGES[19], category: 'starters', price: 28, originalPrice: 32, description: 'Mini Wagyu beef patties with aged cheddar, caramelized onion, and truffle aioli.', ingredients: ['Wagyu Beef','Aged Cheddar','Brioche Bun','Truffle Aioli','Arugula'], allergens: ['Gluten','Dairy'], calories: 580, prepTime: 18, isAvailable: true, isVegetarian: false, isSpicy: false, isFeatured: false, rating: 4.8, reviewCount: 77, badge: 'Limited', createdAt: Date.now()-86400000*3 },
+    ];
+    setLS(KEYS.dishes, dishes);
+  }
+  if (!getLS(KEYS.cart)) setLS(KEYS.cart, []);
+  if (!getLS(KEYS.wishlist)) setLS(KEYS.wishlist, []);
+  if (!getLS(KEYS.orders)) setLS(KEYS.orders, []);
+  if (!getLS(KEYS.reservations)) setLS(KEYS.reservations, []);
+  if (!getLS(KEYS.promoCodes)) {
+    setLS(KEYS.promoCodes, [
+      { code: 'SAVORIA10', type: 'percent', value: 10, desc: '10% off your order' },
+      { code: 'WELCOME20', type: 'percent', value: 20, desc: '20% welcome discount' },
+      { code: 'FLAT15', type: 'flat', value: 15, desc: '$15 off' },
+    ]);
+  }
+}
+
+// ═══════════════════════════════════════
+// STATE & HELPERS
+// ═══════════════════════════════════════
+let currentPage = 'home';
+let currentUser = null;
+let appliedPromo = null;
+let checkoutStep = 1;
+let orderType = 'delivery';
+let selectedTimeSlot = null;
+let adminSubPage = 'dashboard';
+let menuFilter = { cat: 'all', search: '', sort: 'popular', minPrice: 0, maxPrice: 200, veg: false, spicy: false };
+let viewMode = 'grid';
+
+// ─── User-scoped cart & wishlist ───
+// Each user gets their own cart/wishlist so no data leaks between accounts
+function cartKey()     { const u = getLS(KEYS.currentUser); return u ? 'sv_cart_'     + u.id : null; }
+function wishlistKey() { const u = getLS(KEYS.currentUser); return u ? 'sv_wishlist_' + u.id : null; }
+
+function getCart()     { const k = cartKey();     return k ? (getLS(k) || []) : []; }
+function setCart(c)    { const k = cartKey();     if (k) setLS(k, c); updateCartBadge(); }
+function getWishlist() { const k = wishlistKey(); return k ? (getLS(k) || []) : []; }
+function setWishlist(w){ const k = wishlistKey(); if (k) setLS(k, w); }
+
+function getDishes()       { return getLS(KEYS.dishes)       || []; }
+function getOrders()       { return getLS(KEYS.orders)       || []; }
+function getReservations() { return getLS(KEYS.reservations) || []; }
+function getUsers()        { return getLS(KEYS.users)        || []; }
+function getCategories()   { return getLS(KEYS.categories)   || []; }
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  if (!badge) return;
+  if (!isLoggedIn()) { badge.style.display = 'none'; return; }
+  const total = getCart().reduce((s,i) => s + i.qty, 0);
+  if (total > 0) { badge.style.display = 'flex'; badge.textContent = total; badge.classList.add('badge-pulse'); }
+  else           { badge.style.display = 'none';  badge.classList.remove('badge-pulse'); }
+}
+
+function addToCart(dishId, qty = 1) {
+  // Auth guard
+  if (!isLoggedIn()) {
+    window._redirectAfterLogin = { page: 'cart', extra: null };
+    toast('Please login to add items to cart 🔒', 'danger');
+    setTimeout(() => showAuthWall('cart'), 800);
+    return;
+  }
+  const dishes = getDishes();
+  const dish = dishes.find(d => d.id === dishId);
+  if (!dish) return;
+  let cart = getCart();
+  const ex = cart.find(i => i.dishId === dishId);
+  if (ex) ex.qty += qty;
+  else cart.push({ dishId, qty, notes: '', addedAt: Date.now() });
+  setCart(cart);
+  toast(`${dish.name} added to cart 🛒`);
+}
+
+function toggleWishlist(dishId) {
+  // Auth guard
+  if (!isLoggedIn()) {
+    window._redirectAfterLogin = { page: 'profile', extra: null };
+    toast('Please login to save to wishlist 🔒', 'danger');
+    setTimeout(() => showAuthWall('profile'), 800);
+    return;
+  }
+  let wl = getWishlist();
+  const idx = wl.indexOf(dishId);
+  if (idx >= 0) { wl.splice(idx,1); toast('Removed from wishlist'); }
+  else { wl.push(dishId); toast('Added to wishlist ❤️'); }
+  setWishlist(wl);
+}
+
+function isInWishlist(dishId) { return (getWishlist()).includes(dishId); }
+
+function starsHTML(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let s = '';
+  for (let i = 0; i < 5; i++) {
+    if (i < full) s += '★';
+    else if (i === full && half) s += '★';
+    else s += '☆';
+  }
+  return `<span class="stars">${s}</span> <span style="color:var(--text-muted);font-size:0.8rem">${rating}</span>`;
+}
+
+function badgeHTML(badge) {
+  if (!badge) return '';
+  const cls = { "Chef's Special": 'badge-chef', 'New': 'badge-new', 'Popular': 'badge-popular', 'Limited': 'badge-limited' };
+  return `<span class="badge-dish ${cls[badge]||'badge-new'}">${badge}</span>`;
+}
+
+function formatCurrency(n) { return `$${(+n).toFixed(2)}`; }
+
+function formatDate(ts) {
+  return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ─── Toast ───
+function toast(msg, type = 'default') {
+  const tc = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast-item ${type}`;
+  el.innerHTML = `<div style="font-size:0.9rem;color:var(--text-main)">${msg}</div><div class="toast-progress"></div>`;
+  tc.appendChild(el);
+  setTimeout(() => { el.style.animation = 'slideOutRight 0.4s ease forwards'; setTimeout(() => el.remove(), 400); }, 3000);
+}
+
+// ─── Auth ───
+function updateAuthNav() {
+  currentUser = getLS(KEYS.currentUser);
+  const nav = document.getElementById('authNav');
+  if (!nav) return;
+  if (currentUser) {
+    nav.innerHTML = `
+      <div class="d-flex align-items-center gap-2">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(200,151,42,0.2);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--primary);font-weight:700;font-size:0.9rem" onclick="navigate('profile')" title="${currentUser.name}">${currentUser.name[0].toUpperCase()}</div>
+        ${currentUser.role==='admin'?`<button class="btn-outline-gold btn-sm-gold" onclick="navigate('admin')">Admin</button>`:''}
+        <button class="btn-outline-gold btn-sm-gold" onclick="logout()">Logout</button>
+      </div>`;
+  } else {
+    nav.innerHTML = `<button class="btn-gold btn-sm-gold" onclick="navigate('login')">Login</button>`;
+  }
+}
+
+function logout() {
+  localStorage.removeItem(KEYS.currentUser);
+  currentUser = null;
+  updateAuthNav();
+  navigate('home');
+  toast('Logged out successfully');
+}
+
+// ─── Auth Guard ───
+// Pages that require login to access
+const PROTECTED_PAGES = ['cart', 'checkout', 'orders', 'reservations', 'profile'];
+// Pages only accessible by admin
+const ADMIN_PAGES     = ['admin'];
+
+function requiresAuth(page) { return PROTECTED_PAGES.includes(page); }
+function requiresAdmin(page) { return ADMIN_PAGES.includes(page); }
+
+function isLoggedIn() { return !!getLS(KEYS.currentUser); }
+function isAdmin()    { const u = getLS(KEYS.currentUser); return u && u.role === 'admin'; }
+
+// ─── Router ───
+function navigate(page, extra) {
+  // ── Guard: protected pages ──
+  if (requiresAuth(page) && !isLoggedIn()) {
+    window._redirectAfterLogin = { page, extra };
+    showAuthWall(page);
+    return;
+  }
+  // ── Guard: admin pages ──
+  if (requiresAdmin(page) && !isAdmin()) {
+    if (!isLoggedIn()) {
+      window._redirectAfterLogin = { page, extra };
+      showAuthWall(page);
+    } else {
+      toast('Admin access required 🔒', 'danger');
+    }
+    return;
+  }
+
+  currentPage = page;
+  window.scrollTo(0,0);
+  const app = document.getElementById('app');
+  app.style.opacity = '0';
+  app.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    renderPage(page, extra);
+    app.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    app.style.opacity = '1';
+    app.style.transform = 'translateY(0)';
+    updateAuthNav();
+    setupScrollReveal();
+    // Hide footer on admin pages
+    const foot = document.getElementById('footer');
+    if (foot) foot.style.display = page.startsWith('admin') ? 'none' : '';
+  }, 200);
+}
+
+// ─── Auth Wall (elegant redirect screen) ───
+function showAuthWall(targetPage) {
+  const pageLabels = {
+    cart: 'your Cart', checkout: 'Checkout', orders: 'your Orders',
+    reservations: 'Reservations', profile: 'your Profile', admin: 'the Admin Panel'
+  };
+  const label = pageLabels[targetPage] || targetPage;
+  const app   = document.getElementById('app');
+  app.style.opacity = '0'; app.style.transform = 'translateY(10px)';
+  const foot = document.getElementById('footer');
+  if (foot) foot.style.display = '';
+  setTimeout(() => {
+    app.innerHTML = `
+    <div style="padding-top:80px;min-height:100vh;display:flex;align-items:center">
+      <div class="container-xl">
+        <div style="max-width:460px;margin:auto;text-align:center">
+          <div style="font-size:3.5rem;margin-bottom:16px">🔒</div>
+          <div class="script" style="font-size:1.8rem;color:var(--primary);margin-bottom:8px">Access Required</div>
+          <h2 style="font-size:2.4rem;font-weight:300;margin-bottom:12px">Sign in to view <strong>${label}</strong></h2>
+          <p style="color:var(--text-muted);margin-bottom:32px;font-size:0.95rem">
+            You need to be logged in to access this page.<br>
+            Please sign in or create a new account.
+          </p>
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:32px">
+            <div class="mb-3"><label class="form-label-gold">Email Address</label><input class="form-control-gold" id="aw_email" type="email" placeholder="you@example.com"><div class="form-error" id="aw_err_email"></div></div>
+            <div class="mb-4"><label class="form-label-gold">Password</label><input class="form-control-gold" id="aw_pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuthWallLogin()"><div class="form-error" id="aw_err_pw"></div></div>
+            <button class="btn-gold" style="width:100%;margin-bottom:12px" onclick="doAuthWallLogin()">Sign In & Continue</button>
+            <div style="font-size:0.85rem;color:var(--text-muted)">
+              Don't have an account?
+              <a href="#" onclick="window._redirectAfterLogin={page:'${targetPage}',extra:null};navigate('register')" style="color:var(--primary)">Register free</a>
+            </div>
+            <hr style="border-color:var(--card-border);margin:16px 0">
+            <button class="btn-outline-gold" style="width:100%" onclick="navigate('home')">← Back to Home</button>
+            <div class="mt-3 p-3" style="background:rgba(200,151,42,0.06);border:1px solid var(--card-border);border-radius:10px;font-size:0.8rem;color:var(--text-muted)">
+              <strong style="color:var(--primary)">Demo admin:</strong> admin@savoria.com / Admin@123
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    app.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    app.style.opacity    = '1';
+    app.style.transform  = 'translateY(0)';
+    updateAuthNav();
+  }, 200);
+}
+
+function doAuthWallLogin() {
+  const email = document.getElementById('aw_email')?.value?.trim();
+  const pw    = document.getElementById('aw_pw')?.value;
+  const errE  = document.getElementById('aw_err_email');
+  const errP  = document.getElementById('aw_err_pw');
+  if (errE) errE.textContent = '';
+  if (errP) errP.textContent = '';
+  if (!email) { if (errE) errE.textContent = 'Email required'; return; }
+  if (!pw)    { if (errP) errP.textContent = 'Password required'; return; }
+
+  const users = getUsers();
+  const user  = users.find(u => u.email === email && u.password === pw);
+  if (!user) { if (errP) errP.textContent = 'Invalid email or password'; return; }
+
+  setLS(KEYS.currentUser, user);
+  currentUser = user;
+  updateAuthNav();
+  toast(`Welcome back, ${user.name}! 👋`, 'success');
+
+  // Redirect to intended page
+  const redirect = window._redirectAfterLogin;
+  window._redirectAfterLogin = null;
+  if (redirect) {
+    navigate(redirect.page, redirect.extra);
+  } else {
+    navigate(user.role === 'admin' ? 'admin' : 'home');
+  }
+}
+
+function renderPage(page, extra) {
+  const app = document.getElementById('app');
+  const pages = {
+    home: renderHome,
+    menu: renderMenu,
+    dish: renderDish,
+    cart: renderCart,
+    checkout: renderCheckout,
+    orders: renderOrders,
+    reservations: renderReservations,
+    login: renderLogin,
+    register: renderRegister,
+    profile: renderProfile,
+    admin: renderAdmin,
+  };
+  const fn = pages[page];
+  if (fn) app.innerHTML = fn(extra);
+  else app.innerHTML = `<div class="container text-center" style="padding:120px 20px"><h2>Page not found</h2><button class="btn-gold mt-3" onclick="navigate('home')">Go Home</button></div>`;
+  // After render, attach JS
+  afterRender(page, extra);
+}
+
+// ─── Scroll Reveal ───
+function setupScrollReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i*80); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(el => obs.observe(el));
+}
+
+// ═══════════════════════════════════════
+// PAGES RENDER
+// ═══════════════════════════════════════
+
+// ─── HOME ───
+function renderHome() {
+  const dishes = getDishes().filter(d => d.isFeatured);
+  const reviews = [
+    { name: 'Isabella M.', text: 'An absolutely unforgettable evening. The Wagyu Tenderloin was perfection — tender, flavorful, and beautifully presented.', rating: 5, date: 'March 2025' },
+    { name: 'Marcus T.', text: 'Savoria redefines fine dining. The truffle burrata is divine. Every detail speaks to their commitment to excellence.', rating: 5, date: 'April 2025' },
+    { name: 'Sophie L.', text: 'The lobster bisque alone is worth the visit. Warm, elegant ambiance. I return every anniversary.', rating: 5, date: 'April 2025' },
+  ];
+  return `
+  <div style="padding-top:0">
+    <!-- Hero -->
+    <section id="hero">
+      <div class="container-xl py-5">
+        <div class="row align-items-center min-vh-100 gy-4">
+          <div class="col-lg-6 hero-content">
+            <div class="script hero-script">Welcome to Savoria</div>
+            <h1 class="hero-title mt-2 mb-3">Where Every<br><strong>Dish</strong> Tells<br>a Story</h1>
+            <p class="hero-sub mb-4">Fine dining reimagined — where culinary artistry meets warm hospitality. Taste the difference that passion makes.</p>
+            <div class="hero-btns d-flex gap-3 flex-wrap mb-5">
+              <button class="btn-gold" onclick="navigate('menu')">🍽️ Explore Menu</button>
+              <button class="btn-outline-gold" onclick="navigate('reservations')">Reserve a Table</button>
+            </div>
+            <div class="hero-stats d-flex gap-4 flex-wrap">
+              <div><div class="hero-stat-num count-up" data-target="1240">0</div><div class="hero-stat-label">Happy Guests</div></div>
+              <div style="width:1px;background:var(--card-border)"></div>
+              <div><div class="hero-stat-num count-up" data-target="48">0</div><div class="hero-stat-label">Signature Dishes</div></div>
+              <div style="width:1px;background:var(--card-border)"></div>
+              <div><div class="hero-stat-num count-up" data-target="12">0</div><div class="hero-stat-label">Years of Excellence</div></div>
+            </div>
+          </div>
+          <div class="col-lg-6 hero-img-side">
+            <div class="position-relative" style="max-width:520px;margin:auto">
+              <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" class="hero-img-main" alt="Fine Dining">
+              <div class="hero-float-card hero-float-1">
+                <div style="font-size:0.75rem;color:var(--text-muted)">Tonight's Special</div>
+                <div style="color:var(--primary);font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700">Wagyu Tenderloin</div>
+                <div style="font-size:0.8rem;color:var(--text-muted)">★★★★★ &nbsp; Limited Tonight</div>
+              </div>
+              <div class="hero-float-card hero-float-2">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px">Average Rating</div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:1.8rem;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--primary)">4.9</span><span style="color:#E8C060;font-size:1.2rem">★★★★★</span></div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">Based on 1,240+ reviews</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section-py" style="background:var(--card)">
+      <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+          <div class="section-badge">Why Choose Us</div>
+          <h2 class="section-title">The Savoria <strong>Difference</strong></h2>
+          <div class="divider"></div>
+        </div>
+        <div class="row g-4 features-grid">
+          ${[
+            ['👨‍🍳','Michelin-Starred Chefs','Our kitchen is led by award-winning chefs with decades of fine dining mastery.'],
+            ['🌿','Farm-to-Table Fresh','Every ingredient is sourced daily from local farms and premium suppliers worldwide.'],
+            ['🍷','Curated Wine Cellar','Over 300 labels from celebrated estates pair perfectly with every dish.'],
+            ['🎁','Special Occasions','From intimate anniversaries to grand celebrations — we craft unforgettable moments.'],
+          ].map(([i,t,d],idx) => `
+          <div class="col-md-6 col-lg-3 reveal" style="animation-delay:${idx*0.1}s">
+            <div class="feat-card">
+              <div class="feat-icon">${i}</div>
+              <h5 style="font-size:1.25rem;margin-bottom:8px">${t}</h5>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin:0">${d}</p>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Dishes -->
+    <section class="section-py">
+      <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+          <div class="section-badge">Most Loved</div>
+          <h2 class="section-title">Popular <strong>Dishes</strong></h2>
+          <div class="divider"></div>
+        </div>
+        <div class="row g-4">
+          ${dishes.slice(0,6).map((d,i) => `
+          <div class="col-md-6 col-lg-4 reveal" style="transition-delay:${i*0.08}s">
+            ${dishCardHTML(d)}
+          </div>`).join('')}
+        </div>
+        <div class="text-center mt-5 reveal">
+          <button class="btn-gold" onclick="navigate('menu')">View Full Menu →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="section-py" style="background:var(--card)">
+      <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+          <div class="section-badge">Simple & Easy</div>
+          <h2 class="section-title">How It <strong>Works</strong></h2>
+          <div class="divider"></div>
+        </div>
+        <div class="row g-4 text-center">
+          ${[
+            ['🍽️','1','Browse Menu','Explore our curated selection of over 48 signature dishes.'],
+            ['🛒','2','Place Order','Add favorites to cart, customize, and checkout effortlessly.'],
+            ['🚀','3','Enjoy!','Track your order live and savor every bite at your table or home.'],
+          ].map(([icon,num,t,d],i) => `
+          <div class="col-md-4 how-step reveal" style="transition-delay:${i*0.1}s">
+            <div class="how-num">${icon}</div>
+            <h5 style="font-size:1.3rem;margin-bottom:8px">${t}</h5>
+            <p style="color:var(--text-muted);font-size:0.9rem;max-width:240px;margin:auto">${d}</p>
+          </div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section-py">
+      <div class="container-xl">
+        <div class="text-center mb-5 reveal">
+          <div class="section-badge">Testimonials</div>
+          <h2 class="section-title">What Our <strong>Guests</strong> Say</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="row g-4">
+          ${reviews.map((r,i) => `
+          <div class="col-md-4 reveal" style="transition-delay:${i*0.1}s">
+            <div class="testimonial-card h-100">
+              <div class="stars mb-2">★★★★★</div>
+              <p style="color:var(--text-main);font-size:0.95rem;font-style:italic;margin-bottom:16px">"${r.text}"</p>
+              <div class="d-flex align-items-center gap-3 mt-auto">
+                <div style="width:40px;height:40px;border-radius:50%;background:rgba(200,151,42,0.2);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700">${r.name[0]}</div>
+                <div><div style="font-weight:600;font-size:0.9rem">${r.name}</div><div style="color:var(--text-muted);font-size:0.8rem">${r.date}</div></div>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section style="background:linear-gradient(135deg,#1A0A00,#2a1000);border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);padding:60px 0">
+      <div class="container-xl text-center reveal">
+        <div class="script" style="font-size:2.5rem;color:var(--primary);margin-bottom:12px">Ready for an Experience?</div>
+        <h2 style="font-size:2.4rem;font-weight:300;margin-bottom:20px">Reserve Your Table <strong>Tonight</strong></h2>
+        <p style="color:var(--text-muted);max-width:480px;margin:auto auto 28px">Join us for an unforgettable evening of fine cuisine, warm ambiance, and impeccable service.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <button class="btn-gold" onclick="navigate('reservations')">Book a Table</button>
+          <button class="btn-outline-gold" onclick="navigate('menu')">See Menu</button>
+        </div>
+      </div>
+    </section>
+  </div>`;
+}
+
+// ─── DISH CARD HTML ───
+function dishCardHTML(d) {
+  const inWl = isInWishlist(d.id);
+  return `
+  <div class="dish-card h-100" onclick="navigate('dish','${d.id}')">
+    <div class="img-wrap position-relative">
+      <img src="${d.image}" class="card-img" alt="${d.name}" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80'">
+      <div class="img-overlay">
+        <button class="btn-gold btn-sm-gold" onclick="event.stopPropagation();addToCart('${d.id}')">+ Add to Cart</button>
+      </div>
+      <div style="position:absolute;top:10px;left:10px;display:flex;gap:6px;align-items:center">
+        ${badgeHTML(d.badge)}
+      </div>
+      <div style="position:absolute;top:10px;right:10px;display:flex;gap:4px">
+        ${d.isVegetarian?'<div class="veg-dot" title="Vegetarian"></div>':''}
+        ${d.isSpicy?'<span class="spicy-icon" title="Spicy">🌶</span>':''}
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-1">
+        <h6 style="font-size:1.1rem;margin:0;font-family:'Cormorant Garamond',serif;line-height:1.2">${d.name}</h6>
+        <button class="wish-btn ${inWl?'active':''}" onclick="event.stopPropagation();toggleWishlist('${d.id}');this.classList.toggle('active')" style="margin-left:8px">♥</button>
+      </div>
+      <div class="mb-2">${starsHTML(d.rating)} <span style="color:var(--text-muted);font-size:0.8rem">(${d.reviewCount})</span></div>
+      <div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:8px">⏱ ${d.prepTime}m &nbsp; 🔥 ${d.calories} cal</div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="price-main">${formatCurrency(d.price)}</span>
+        ${d.originalPrice>d.price?`<span class="price-old">${formatCurrency(d.originalPrice)}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── MENU ───
+function renderMenu() {
+  const cats = getCategories();
+  const dishes = getDishes();
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4">
+      <div class="row mb-4">
+        <div class="col">
+          <h2 style="font-size:2.2rem;font-weight:300">Our <strong>Menu</strong></h2>
+          <p style="color:var(--text-muted)">Crafted with passion, served with love</p>
+        </div>
+        <div class="col-auto d-flex align-items-center gap-2">
+          <button class="icon-btn ${viewMode==='grid'?'active':''}" onclick="viewMode='grid';document.getElementById('menuGrid').className='row g-4';renderMenuItems()" title="Grid">⊞</button>
+          <button class="icon-btn ${viewMode==='list'?'active':''}" onclick="viewMode='list';document.getElementById('menuGrid').className='row g-3';renderMenuItems()" title="List">☰</button>
+        </div>
+      </div>
+
+      <!-- Category tabs -->
+      <div class="cat-tabs mb-4">
+        <button class="cat-tab ${menuFilter.cat==='all'?'active':''}" onclick="setMenuCat('all')">All</button>
+        ${cats.map(c => `<button class="cat-tab ${menuFilter.cat===c.id?'active':''}" onclick="setMenuCat('${c.id}')">${c.icon} ${c.name}</button>`).join('')}
+      </div>
+
+      <div class="row g-4">
+        <!-- Filter sidebar -->
+        <div class="col-lg-3">
+          <div class="filter-sidebar">
+            <div class="filter-title">Search</div>
+            <div class="search-wrap mb-4">
+              <span class="search-icon">🔍</span>
+              <input class="form-control-gold" id="menuSearch" placeholder="Search dishes..." value="${menuFilter.search}" oninput="menuFilter.search=this.value;renderMenuItems()">
+            </div>
+            <div class="filter-title">Sort By</div>
+            <select class="form-control-gold mb-4" onchange="menuFilter.sort=this.value;renderMenuItems()">
+              <option value="popular" ${menuFilter.sort==='popular'?'selected':''}>Most Popular</option>
+              <option value="price-asc" ${menuFilter.sort==='price-asc'?'selected':''}>Price: Low to High</option>
+              <option value="price-desc" ${menuFilter.sort==='price-desc'?'selected':''}>Price: High to Low</option>
+              <option value="rating" ${menuFilter.sort==='rating'?'selected':''}>Highest Rated</option>
+              <option value="newest" ${menuFilter.sort==='newest'?'selected':''}>Newest</option>
+            </select>
+            <div class="filter-title">Price Range</div>
+            <input type="range" min="0" max="100" value="${menuFilter.maxPrice}" id="priceRange" oninput="menuFilter.maxPrice=+this.value;document.getElementById('priceVal').textContent='$'+this.value;renderMenuItems()" class="mb-1">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-muted);margin-bottom:16px"><span>$0</span><span id="priceVal">$${menuFilter.maxPrice}</span></div>
+            <div class="filter-title">Dietary</div>
+            <label class="d-flex align-items-center gap-2 mb-2" style="cursor:pointer;font-size:0.9rem;color:var(--text-muted)">
+              <label class="toggle-switch"><input type="checkbox" ${menuFilter.veg?'checked':''} onchange="menuFilter.veg=this.checked;renderMenuItems()"><span class="toggle-slider"></span></label>
+              🌿 Vegetarian Only
+            </label>
+            <label class="d-flex align-items-center gap-2 mb-3" style="cursor:pointer;font-size:0.9rem;color:var(--text-muted)">
+              <label class="toggle-switch"><input type="checkbox" ${menuFilter.spicy?'checked':''} onchange="menuFilter.spicy=this.checked;renderMenuItems()"><span class="toggle-slider"></span></label>
+              🌶 Spicy Only
+            </label>
+            <button class="btn-outline-gold" style="width:100%;padding:9px;font-size:0.85rem" onclick="menuFilter={cat:'all',search:'',sort:'popular',minPrice:0,maxPrice:200,veg:false,spicy:false};navigate('menu')">Reset Filters</button>
+          </div>
+        </div>
+        <!-- Dishes grid -->
+        <div class="col-lg-9">
+          <div id="menuGrid" class="row g-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function setMenuCat(cat) {
+  menuFilter.cat = cat;
+  // Update active tabs
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderMenuItems();
+}
+
+function renderMenuItems() {
+  let dishes = getDishes().filter(d => d.isAvailable);
+  if (menuFilter.cat !== 'all') dishes = dishes.filter(d => d.category === menuFilter.cat);
+  if (menuFilter.search) dishes = dishes.filter(d => d.name.toLowerCase().includes(menuFilter.search.toLowerCase()) || d.description.toLowerCase().includes(menuFilter.search.toLowerCase()));
+  if (menuFilter.veg) dishes = dishes.filter(d => d.isVegetarian);
+  if (menuFilter.spicy) dishes = dishes.filter(d => d.isSpicy);
+  dishes = dishes.filter(d => d.price <= menuFilter.maxPrice);
+  if (menuFilter.sort === 'price-asc') dishes.sort((a,b) => a.price-b.price);
+  else if (menuFilter.sort === 'price-desc') dishes.sort((a,b) => b.price-a.price);
+  else if (menuFilter.sort === 'rating') dishes.sort((a,b) => b.rating-a.rating);
+  else if (menuFilter.sort === 'newest') dishes.sort((a,b) => b.createdAt-a.createdAt);
+  else dishes.sort((a,b) => b.reviewCount-a.reviewCount);
+
+  const grid = document.getElementById('menuGrid');
+  if (!grid) return;
+  if (!dishes.length) {
+    grid.innerHTML = `<div class="col-12"><div class="empty-state"><div class="empty-icon">🍽️</div><h5>No dishes found</h5><p>Try adjusting your filters</p></div></div>`;
+    return;
+  }
+  grid.innerHTML = dishes.map((d,i) => `<div class="${viewMode==='grid'?'col-md-6 col-xl-4':'col-12'} reveal" style="transition-delay:${i*0.04}s">${viewMode==='list'?dishListHTML(d):dishCardHTML(d)}</div>`).join('');
+  setupScrollReveal();
+}
+
+function dishListHTML(d) {
+  return `
+  <div class="dish-card d-flex" style="flex-direction:row;height:auto;border-radius:14px;cursor:pointer" onclick="navigate('dish','${d.id}')">
+    <img src="${d.image}" style="width:120px;height:100px;object-fit:cover;border-radius:14px 0 0 14px;flex-shrink:0" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&q=80'">
+    <div class="card-body d-flex justify-content-between align-items-center w-100">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">${badgeHTML(d.badge)}<h6 style="margin:0;font-size:1rem;font-family:'Cormorant Garamond',serif">${d.name}</h6></div>
+        <div>${starsHTML(d.rating)} <span style="color:var(--text-muted);font-size:0.8rem">(${d.reviewCount}) &nbsp; ⏱${d.prepTime}m</span></div>
+      </div>
+      <div class="d-flex align-items-center gap-3 flex-shrink-0">
+        <div><div class="price-main">${formatCurrency(d.price)}</div>${d.originalPrice>d.price?`<div class="price-old">${formatCurrency(d.originalPrice)}</div>`:''}</div>
+        <button class="btn-gold btn-sm-gold" onclick="event.stopPropagation();addToCart('${d.id}')">+ Cart</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── DISH DETAIL ───
+function renderDish(id) {
+  const dishes = getDishes();
+  const d = dishes.find(x => x.id === id);
+  if (!d) return `<div class="container text-center" style="padding:120px 20px"><h3>Dish not found</h3><button class="btn-gold mt-3" onclick="navigate('menu')">Back to Menu</button></div>`;
+  const related = dishes.filter(x => x.category === d.category && x.id !== d.id).slice(0,3);
+  return `
+  <div style="padding-top:80px">
+    <div class="container-xl py-4">
+      <button class="btn-outline-gold btn-sm-gold mb-4" onclick="navigate('menu')">← Back to Menu</button>
+      <div class="row g-5">
+        <div class="col-lg-6">
+          <div class="position-relative" style="border-radius:20px;overflow:hidden">
+            <img src="${d.image}" style="width:100%;max-height:480px;object-fit:cover;border:1px solid var(--card-border)" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80'" alt="${d.name}">
+            <div style="position:absolute;top:16px;left:16px;display:flex;gap:6px">${badgeHTML(d.badge)}</div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            ${d.isVegetarian?'<div class="veg-dot"></div>':''}
+            ${d.isSpicy?'<span class="spicy-icon">🌶 Spicy</span>':''}
+          </div>
+          <h1 style="font-size:3rem;font-weight:300;margin-bottom:4px">${d.name}</h1>
+          <div class="mb-3">${starsHTML(d.rating)} <span style="color:var(--text-muted);font-size:0.9rem">${d.reviewCount} reviews</span></div>
+          <p style="color:var(--text-muted);font-size:1rem;line-height:1.7;margin-bottom:20px">${d.description}</p>
+          
+          <div class="d-flex gap-4 mb-4" style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:16px">
+            <div class="text-center flex-1"><div style="font-size:1.3rem;font-weight:700;color:var(--primary)">${d.calories}</div><div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Calories</div></div>
+            <div style="width:1px;background:var(--card-border)"></div>
+            <div class="text-center flex-1"><div style="font-size:1.3rem;font-weight:700;color:var(--primary)">${d.prepTime}m</div><div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Prep Time</div></div>
+            <div style="width:1px;background:var(--card-border)"></div>
+            <div class="text-center flex-1"><div style="font-size:1.3rem;font-weight:700;color:${d.isAvailable?'var(--success)':'var(--danger)'}">${d.isAvailable?'Yes':'No'}</div><div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Available</div></div>
+          </div>
+
+          <div class="mb-4">
+            <div class="filter-title mb-2">Ingredients</div>
+            <div class="d-flex flex-wrap gap-2">${d.ingredients.map(i => `<span style="background:rgba(200,151,42,0.1);border:1px solid rgba(200,151,42,0.2);color:var(--text-main);padding:4px 12px;border-radius:50px;font-size:0.82rem">${i}</span>`).join('')}</div>
+          </div>
+          ${d.allergens.length?`<div class="mb-4"><div class="filter-title mb-2">⚠ Allergens</div><div class="d-flex flex-wrap gap-2">${d.allergens.map(a => `<span style="background:rgba(229,57,53,0.1);border:1px solid rgba(229,57,53,0.2);color:#ff6b6b;padding:4px 12px;border-radius:50px;font-size:0.82rem">${a}</span>`).join('')}</div></div>`:''}
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div><span class="price-main" style="font-size:1.8rem">${formatCurrency(d.price)}</span>${d.originalPrice>d.price?`<span class="price-old ms-2">${formatCurrency(d.originalPrice)}</span>`:''}</div>
+          </div>
+          
+          <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+              <button class="qty-btn" onclick="changeDishQty(-1)">−</button>
+              <span class="qty-display" id="dishQty">1</span>
+              <button class="qty-btn" onclick="changeDishQty(1)">+</button>
+            </div>
+            <button class="btn-gold flex-1" onclick="addToCartDetail('${d.id}')">Add to Cart</button>
+            <button class="wish-btn ${isInWishlist(d.id)?'active':''}" onclick="toggleWishlist('${d.id}');this.classList.toggle('active')" title="Wishlist">♥</button>
+          </div>
+        </div>
+      </div>
+
+      ${related.length?`
+      <div class="mt-5">
+        <h3 style="font-size:2rem;font-weight:300;margin-bottom:24px">You May Also <strong>Like</strong></h3>
+        <div class="row g-4">
+          ${related.map(r => `<div class="col-md-4">${dishCardHTML(r)}</div>`).join('')}
+        </div>
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+// ─── CART ───
+function renderCart() {
+  const cart = getCart();
+  const dishes = getDishes();
+  let subtotal = 0;
+  const items = cart.map(item => {
+    const d = dishes.find(x => x.id === item.dishId);
+    if (!d) return null;
+    subtotal += d.price * item.qty;
+    return { ...item, dish: d };
+  }).filter(Boolean);
+
+  const deliveryFee = orderType === 'delivery' ? 5 : 0;
+  const discount = appliedPromo ? (appliedPromo.type === 'percent' ? subtotal*(appliedPromo.value/100) : appliedPromo.value) : 0;
+  const tax = (subtotal - discount) * 0.08;
+  const total = subtotal - discount + tax + deliveryFee;
+
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4">
+      <h2 style="font-size:2.2rem;font-weight:300;margin-bottom:8px">Your <strong>Cart</strong></h2>
+      ${!items.length ? `
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h4>Your cart is empty</h4>
+        <p style="color:var(--text-muted);margin-bottom:20px">Looks like you haven't added anything yet.</p>
+        <button class="btn-gold" onclick="navigate('menu')">Browse Menu</button>
+      </div>` : `
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <!-- Order type -->
+          <div class="d-flex gap-2 mb-4">
+            ${['delivery','pickup','dine-in'].map(t => `<button class="cat-tab ${orderType===t?'active':''}" onclick="orderType='${t}';navigate('cart')">${t==='delivery'?'🚚':t==='pickup'?'🏃':'🪑'} ${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('')}
+          </div>
+          <!-- Items -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+            ${items.map(item => `
+            <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:16px;display:flex;gap:16px;align-items:flex-start">
+              <img src="${item.dish.image}" style="width:80px;height:70px;object-fit:cover;border-radius:10px;flex-shrink:0" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&q=80'">
+              <div class="flex-1">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <h6 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin:0">${item.dish.name}</h6>
+                  <button class="icon-btn danger" onclick="removeFromCart('${item.dishId}')">✕</button>
+                </div>
+                <div style="color:var(--primary);font-weight:700;margin-bottom:8px">${formatCurrency(item.dish.price)}</div>
+                <div class="d-flex align-items-center gap-2">
+                  <button class="qty-btn" onclick="updateCartQty('${item.dishId}',-1)">−</button>
+                  <span class="qty-display">${item.qty}</span>
+                  <button class="qty-btn" onclick="updateCartQty('${item.dishId}',1)">+</button>
+                  <span style="color:var(--text-muted);font-size:0.85rem;margin-left:8px">= ${formatCurrency(item.dish.price*item.qty)}</span>
+                </div>
+                <input class="form-control-gold mt-2" style="font-size:0.82rem;padding:7px 12px" placeholder="Special instructions..." value="${item.notes||''}" oninput="updateCartNotes('${item.dishId}',this.value)">
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:24px;position:sticky;top:88px">
+            <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:20px">Order <strong>Summary</strong></h5>
+            <div class="d-flex justify-content-between mb-2" style="font-size:0.9rem"><span style="color:var(--text-muted)">Subtotal</span><span>${formatCurrency(subtotal)}</span></div>
+            ${deliveryFee?`<div class="d-flex justify-content-between mb-2" style="font-size:0.9rem"><span style="color:var(--text-muted)">Delivery Fee</span><span>${formatCurrency(deliveryFee)}</span></div>`:''}
+            ${discount>0?`<div class="d-flex justify-content-between mb-2" style="font-size:0.9rem;color:var(--success)"><span>Discount (${appliedPromo.code})</span><span>−${formatCurrency(discount)}</span></div>`:''}
+            <div class="d-flex justify-content-between mb-3" style="font-size:0.9rem"><span style="color:var(--text-muted)">Tax (8%)</span><span>${formatCurrency(tax)}</span></div>
+            <hr style="border-color:var(--card-border)">
+            <div class="d-flex justify-content-between mb-4"><span style="font-weight:700">Total</span><span style="color:var(--primary);font-weight:700;font-size:1.2rem">${formatCurrency(total)}</span></div>
+            <!-- Promo -->
+            <div class="mb-4">
+              <div class="promo-input-wrap">
+                <input class="form-control-gold" id="promoInput" placeholder="Promo code" value="${appliedPromo?appliedPromo.code:''}">
+                <button class="btn-outline-gold btn-sm-gold" onclick="applyPromo()">Apply</button>
+              </div>
+              ${appliedPromo?`<div style="font-size:0.8rem;color:var(--success);margin-top:4px">✓ ${appliedPromo.desc}</div>`:''}
+            </div>
+            <button class="btn-gold" style="width:100%" onclick="navigate('checkout')">Proceed to Checkout →</button>
+          </div>
+        </div>
+      </div>`}
+    </div>
+  </div>`;
+}
+
+// ─── CHECKOUT ───
+function renderCheckout() {
+  currentUser = getLS(KEYS.currentUser);
+  checkoutStep = checkoutStep || 1;
+  if (checkoutStep === 3) { // success
+    return `
+    <div style="padding-top:80px;min-height:80vh;display:flex;align-items:center">
+      <div class="container-xl">
+        <div class="success-screen">
+          <div class="success-icon">✓</div>
+          <h2 style="font-size:2.8rem;font-weight:300">Order <strong>Placed!</strong></h2>
+          <p style="color:var(--text-muted);font-size:1.1rem;margin:12px 0 8px">Your order #<strong style="color:var(--primary)" id="orderNum"></strong> has been received.</p>
+          <p style="color:var(--text-muted)">Estimated delivery: <strong style="color:var(--primary)">30–45 minutes</strong></p>
+          <div class="d-flex gap-3 justify-content-center mt-4">
+            <button class="btn-gold" onclick="navigate('orders')">Track Order</button>
+            <button class="btn-outline-gold" onclick="checkoutStep=1;navigate('menu')">Continue Shopping</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  const cart = getCart();
+  const dishes = getDishes();
+  let subtotal = 0;
+  const items = cart.map(item => { const d = dishes.find(x=>x.id===item.dishId); if(d) subtotal+=d.price*item.qty; return d?{...item,dish:d}:null; }).filter(Boolean);
+  const deliveryFee = orderType==='delivery'?5:0;
+  const discount = appliedPromo?(appliedPromo.type==='percent'?subtotal*(appliedPromo.value/100):appliedPromo.value):0;
+  const tax = (subtotal-discount)*0.08;
+  const total = subtotal-discount+tax+deliveryFee;
+
+  const steps = ['Delivery Details','Order Review','Payment'];
+
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4" style="max-width:780px">
+      <h2 style="font-size:2.2rem;font-weight:300;margin-bottom:24px">Checkout</h2>
+      <!-- Progress -->
+      <div class="checkout-steps mb-5">
+        ${steps.map((s,i) => `
+        <div class="checkout-step">
+          <div class="step-num ${checkoutStep>i+1?'done':checkoutStep===i+1?'active':''}">${checkoutStep>i+1?'✓':i+1}</div>
+          <div class="step-label ${checkoutStep===i+1?'active':''}">${s}</div>
+        </div>
+        ${i<steps.length-1?`<div class="step-line ${checkoutStep>i+1?'done':''}"></div>`:''}`).join('')}
+      </div>
+
+      ${checkoutStep===1?`
+      <div>
+        <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:20px">Delivery <strong>Details</strong></h5>
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label-gold">Full Name</label><input class="form-control-gold" id="co_name" value="${currentUser?currentUser.name:''}" placeholder="Your name"></div>
+          <div class="col-md-6"><label class="form-label-gold">Phone</label><input class="form-control-gold" id="co_phone" value="${currentUser?currentUser.phone:''}" placeholder="+1 234 567 8900"></div>
+          <div class="col-12"><label class="form-label-gold">Delivery Address</label><input class="form-control-gold" id="co_address" placeholder="123 Main Street, City, State"></div>
+          <div class="col-md-6"><label class="form-label-gold">City</label><input class="form-control-gold" id="co_city" placeholder="New York"></div>
+          <div class="col-md-6"><label class="form-label-gold">Zip Code</label><input class="form-control-gold" id="co_zip" placeholder="10001"></div>
+          <div class="col-12"><label class="form-label-gold">Additional Notes</label><textarea class="form-control-gold" id="co_notes" rows="2" placeholder="Gate code, leave at door, etc."></textarea></div>
+        </div>
+        <button class="btn-gold mt-4" onclick="checkoutStep=2;navigate('checkout')">Continue →</button>
+      </div>` : `
+      <div>
+        <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:20px">Review & <strong>Payment</strong></h5>
+        <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:20px">
+          ${items.map(item => `<div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color:var(--card-border)!important"><div class="d-flex align-items-center gap-3"><img src="${item.dish.image}" style="width:44px;height:40px;object-fit:cover;border-radius:8px"><span style="font-size:0.95rem">${item.dish.name} ×${item.qty}</span></div><strong style="color:var(--primary)">${formatCurrency(item.dish.price*item.qty)}</strong></div>`).join('')}
+          <div class="d-flex justify-content-between mt-2"><span style="color:var(--text-muted)">Total</span><strong style="color:var(--primary);font-size:1.1rem">${formatCurrency(total)}</strong></div>
+        </div>
+        <div class="filter-title mb-3">Payment Method</div>
+        <div class="d-flex gap-3 mb-4">
+          <label class="d-flex align-items-center gap-2 p-3 cursor-pointer" style="background:rgba(200,151,42,0.1);border:1px solid var(--primary);border-radius:12px;cursor:pointer;flex:1">
+            <input type="radio" name="payment" value="cash" checked style="accent-color:var(--primary)"> 💵 Cash on Delivery
+          </label>
+          <label class="d-flex align-items-center gap-2 p-3" style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;cursor:pointer;flex:1">
+            <input type="radio" name="payment" value="card" style="accent-color:var(--primary)"> 💳 Card (Coming Soon)
+          </label>
+        </div>
+        <div class="d-flex gap-3">
+          <button class="btn-outline-gold" onclick="checkoutStep=1;navigate('checkout')">← Back</button>
+          <button class="btn-gold flex-1" onclick="placeOrder()">Place Order 🎉</button>
+        </div>
+      </div>`}
+    </div>
+  </div>`;
+}
+
+// ─── ORDERS ───
+function renderOrders() {
+  currentUser = getLS(KEYS.currentUser);
+  if (!currentUser) return renderLogin();
+  const orders = getOrders().filter(o => o.customerId === currentUser.id).sort((a,b) => b.createdAt-a.createdAt);
+  const statuses = ['placed','confirmed','preparing','ready','delivered'];
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4">
+      <h2 style="font-size:2.2rem;font-weight:300;margin-bottom:4px">My <strong>Orders</strong></h2>
+      <p style="color:var(--text-muted);margin-bottom:28px">Track and view your order history</p>
+      ${!orders.length?`<div class="empty-state"><div class="empty-icon">📦</div><h5>No orders yet</h5><button class="btn-gold mt-3" onclick="navigate('menu')">Start Ordering</button></div>`:`
+      <div style="display:flex;flex-direction:column;gap:16px">
+        ${orders.map(order => {
+          const curIdx = statuses.indexOf(order.status);
+          const dishes = getDishes();
+          return `
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:24px">
+            <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+              <div>
+                <div style="font-size:0.8rem;color:var(--text-muted)">Order #${order.id.slice(-8).toUpperCase()}</div>
+                <div style="font-size:1rem;font-weight:600">${formatDate(order.createdAt)}</div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <span class="status-badge status-${order.status}">${order.status}</span>
+                <strong style="color:var(--primary)">${formatCurrency(order.total)}</strong>
+              </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              ${order.items.map(item => { const d = dishes.find(x=>x.id===item.dishId); return d?`<span style="font-size:0.85rem;background:rgba(255,255,255,0.04);border:1px solid var(--card-border);padding:4px 10px;border-radius:8px">${d.name} ×${item.qty}</span>`:''; }).join('')}
+            </div>
+            <!-- Timeline -->
+            <div style="display:flex;gap:0;overflow-x:auto;padding-bottom:4px">
+              ${statuses.map((s,i) => {
+                const done = i < curIdx;
+                const cur = i === curIdx;
+                return `<div style="flex:1;min-width:90px;text-align:center;position:relative">
+                  <div style="width:100%;height:2px;background:${done||cur?'var(--primary)':'var(--card-border)'};position:absolute;top:9px;left:50%;right:0"></div>
+                  <div style="width:20px;height:20px;border-radius:50%;background:${done?'var(--success)':cur?'var(--primary)':'var(--card)'};border:2px solid ${done?'var(--success)':cur?'var(--primary)':'var(--card-border)'};margin:0 auto 6px;position:relative;z-index:1;${cur?'animation:pulse-gold 1.5s infinite':''}">${done?'<span style="font-size:0.6rem;color:#fff;display:flex;align-items:center;justify-content:center;height:100%">✓</span>':''}</div>
+                  <div style="font-size:0.7rem;color:${done||cur?'var(--primary)':'var(--text-muted)'};text-transform:capitalize">${s}</div>
+                </div>`;
+              }).join('')}
+            </div>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn-outline-gold btn-sm-gold" onclick="reorder('${order.id}')">Reorder</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`}
+    </div>
+  </div>`;
+}
+
+// ─── RESERVATIONS ───
+function renderReservations() {
+  currentUser = getLS(KEYS.currentUser);
+  const myRes = currentUser ? getReservations().filter(r => r.customerId === currentUser.id) : [];
+  const occasions = ['Birthday','Anniversary','Business','Casual','Other'];
+  const times = ['12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','7:00 PM','7:30 PM','8:00 PM','8:30 PM','9:00 PM','9:30 PM'];
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4">
+      <div class="row g-5">
+        <div class="col-lg-7">
+          <h2 style="font-size:2.2rem;font-weight:300;margin-bottom:4px">Reserve a <strong>Table</strong></h2>
+          <p style="color:var(--text-muted);margin-bottom:28px">Book your perfect dining experience</p>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label-gold">Your Name *</label><input class="form-control-gold" id="res_name" value="${currentUser?currentUser.name:''}" placeholder="Full name"></div>
+            <div class="col-md-6"><label class="form-label-gold">Phone *</label><input class="form-control-gold" id="res_phone" value="${currentUser?currentUser.phone:''}" placeholder="+1 234 567 8900"></div>
+            <div class="col-md-6"><label class="form-label-gold">Date *</label><input class="form-control-gold" type="date" id="res_date" min="${new Date().toISOString().split('T')[0]}" onchange="renderTimeSlots()"></div>
+            <div class="col-md-6"><label class="form-label-gold">Guests *</label>
+              <select class="form-control-gold" id="res_guests">
+                ${[1,2,3,4,5,6,7,8].map(n=>`<option value="${n}">${n} Guest${n>1?'s':''}</option>`).join('')}
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label-gold">Select Time *</label>
+              <div class="time-slots" id="timeSlots">
+                ${times.map(t=>`<div class="time-slot" onclick="selectTime(this,'${t}')">${t}</div>`).join('')}
+              </div>
+            </div>
+            <div class="col-12"><label class="form-label-gold">Occasion</label>
+              <div class="d-flex flex-wrap gap-2" id="occasionBtns">
+                ${occasions.map(o=>`<button class="cat-tab" style="padding:7px 16px;font-size:0.82rem" onclick="selectOccasion(this,'${o}')">${o}</button>`).join('')}
+              </div>
+            </div>
+            <div class="col-12"><label class="form-label-gold">Special Requests</label><textarea class="form-control-gold" id="res_notes" rows="3" placeholder="Allergies, special seating, decorations..."></textarea></div>
+            <div class="col-12"><button class="btn-gold" style="width:100%" onclick="makeReservation()">Confirm Reservation 🎉</button></div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:24px;position:sticky;top:88px">
+            <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:16px">My <strong>Reservations</strong></h5>
+            ${!myRes.length?`<div class="text-center py-4" style="color:var(--text-muted)"><div style="font-size:2.5rem;margin-bottom:8px">📅</div>No reservations yet</div>`:
+            myRes.slice(0,5).map(r => `
+            <div style="border-bottom:1px solid var(--card-border);padding:12px 0" class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:600;font-size:0.95rem">${r.date} at ${r.time}</div>
+                <div style="color:var(--text-muted);font-size:0.82rem">${r.guests} guests ${r.occasion?'• '+r.occasion:''}</div>
+              </div>
+              <span class="status-badge status-${r.status}">${r.status}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── LOGIN ───
+function renderLogin() {
+  return `
+  <div style="padding-top:80px;min-height:100vh;display:flex;align-items:center">
+    <div class="container-xl">
+      <div style="max-width:440px;margin:auto">
+        <div class="text-center mb-4">
+          <div class="script" style="font-size:2rem;color:var(--primary)">Welcome Back</div>
+          <h2 style="font-size:2.4rem;font-weight:300">Sign <strong>In</strong></h2>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:32px">
+          <div class="mb-3"><label class="form-label-gold">Email Address</label><input class="form-control-gold" id="login_email" type="email" placeholder="you@example.com"><div class="form-error" id="err_email"></div></div>
+          <div class="mb-4"><label class="form-label-gold">Password</label><input class="form-control-gold" id="login_pw" type="password" placeholder="••••••••"><div class="form-error" id="err_pw"></div></div>
+          <button class="btn-gold" style="width:100%" onclick="doLogin()">Sign In</button>
+          <div class="text-center mt-3" style="font-size:0.9rem;color:var(--text-muted)">Don't have an account? <a href="#" onclick="navigate('register')" style="color:var(--primary)">Register</a></div>
+          <div class="mt-3 p-3" style="background:rgba(200,151,42,0.06);border:1px solid var(--card-border);border-radius:10px;font-size:0.8rem;color:var(--text-muted)">
+            <strong style="color:var(--primary)">Demo:</strong> admin@savoria.com / Admin@123
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── REGISTER ───
+function renderRegister() {
+  return `
+  <div style="padding-top:80px;min-height:100vh;display:flex;align-items:center">
+    <div class="container-xl">
+      <div style="max-width:520px;margin:auto">
+        <div class="text-center mb-4">
+          <div class="script" style="font-size:2rem;color:var(--primary)">Join Savoria</div>
+          <h2 style="font-size:2.4rem;font-weight:300">Create <strong>Account</strong></h2>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:32px">
+          <div class="row g-3">
+            <div class="col-12"><label class="form-label-gold">Full Name *</label><input class="form-control-gold" id="reg_name" placeholder="John Doe"><div class="form-error" id="err_rname"></div></div>
+            <div class="col-md-6"><label class="form-label-gold">Email *</label><input class="form-control-gold" id="reg_email" type="email" placeholder="you@example.com"><div class="form-error" id="err_remail"></div></div>
+            <div class="col-md-6"><label class="form-label-gold">Phone *</label><input class="form-control-gold" id="reg_phone" placeholder="+1 234 567 8900"><div class="form-error" id="err_rphone"></div></div>
+            <div class="col-md-6"><label class="form-label-gold">Password *</label><input class="form-control-gold" id="reg_pw" type="password" placeholder="Min. 8 characters"><div class="form-error" id="err_rpw"></div></div>
+            <div class="col-md-6"><label class="form-label-gold">Confirm Password *</label><input class="form-control-gold" id="reg_cpw" type="password" placeholder="Repeat password"><div class="form-error" id="err_rcpw"></div></div>
+            <div class="col-12"><label class="form-label-gold">Date of Birth (for birthday offers)</label><input class="form-control-gold" id="reg_dob" type="date"></div>
+            <div class="col-12 mt-2"><button class="btn-gold" style="width:100%" onclick="doRegister()">Create Account</button></div>
+          </div>
+          <div class="text-center mt-3" style="font-size:0.9rem;color:var(--text-muted)">Already have an account? <a href="#" onclick="navigate('login')" style="color:var(--primary)">Sign In</a></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── PROFILE ───
+function renderProfile() {
+  currentUser = getLS(KEYS.currentUser);
+  if (!currentUser) return renderLogin();
+  const orders = getOrders().filter(o => o.customerId === currentUser.id);
+  const wishlist = getWishlist();
+  const dishes = getDishes();
+  const wlDishes = dishes.filter(d => wishlist.includes(d.id));
+  const points = orders.length * 50 + orders.reduce((s,o)=>s+Math.floor(o.total),0);
+  return `
+  <div style="padding-top:80px;min-height:100vh">
+    <div class="container-xl py-4">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:28px;text-align:center">
+            <div style="width:80px;height:80px;border-radius:50%;background:rgba(200,151,42,0.15);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2rem;font-weight:700;color:var(--primary);font-family:'Cormorant Garamond',serif">${currentUser.name[0].toUpperCase()}</div>
+            <h4 style="font-size:1.6rem;font-weight:300;margin-bottom:4px">${currentUser.name}</h4>
+            <div style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px">${currentUser.email}</div>
+            ${currentUser.role==='admin'?`<span class="status-badge status-confirmed">Admin</span>`:`<span class="status-badge status-pending">Customer</span>`}
+            <hr style="border-color:var(--card-border);margin:20px 0">
+            <div class="text-start">
+              <div class="filter-title mb-3">Loyalty Points</div>
+              <div class="d-flex justify-content-between mb-2"><span style="font-size:1.6rem;font-weight:700;color:var(--primary)">${points}</span><span style="color:var(--text-muted);font-size:0.85rem;align-self:flex-end">/ 1000 Gold</span></div>
+              <div class="loyalty-bar"><div class="loyalty-fill" style="width:${Math.min(points/10,100)}%"></div></div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px">${Math.max(0,1000-points)} points to Gold tier</div>
+            </div>
+            <hr style="border-color:var(--card-border);margin:20px 0">
+            <div class="d-flex justify-content-around">
+              <div class="text-center"><div style="font-size:1.5rem;font-weight:700;color:var(--primary)">${orders.length}</div><div style="font-size:0.75rem;color:var(--text-muted)">Orders</div></div>
+              <div class="text-center"><div style="font-size:1.5rem;font-weight:700;color:var(--primary)">${wishlist.length}</div><div style="font-size:0.75rem;color:var(--text-muted)">Wishlist</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:28px;margin-bottom:20px">
+            <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:20px">Edit <strong>Profile</strong></h5>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label-gold">Full Name</label><input class="form-control-gold" id="p_name" value="${currentUser.name}"></div>
+              <div class="col-md-6"><label class="form-label-gold">Phone</label><input class="form-control-gold" id="p_phone" value="${currentUser.phone||''}"></div>
+              <div class="col-12"><label class="form-label-gold">Email</label><input class="form-control-gold" value="${currentUser.email}" disabled></div>
+              <div class="col-12"><button class="btn-gold btn-sm-gold" onclick="saveProfile()">Save Changes</button></div>
+            </div>
+          </div>
+          ${wlDishes.length?`
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:28px">
+            <h5 style="font-size:1.4rem;font-weight:300;margin-bottom:16px">My <strong>Wishlist</strong></h5>
+            <div class="row g-3">
+              ${wlDishes.slice(0,4).map(d=>`<div class="col-md-6"><div class="d-flex align-items-center gap-3 p-3" style="background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:12px;cursor:pointer" onclick="navigate('dish','${d.id}')"><img src="${d.image}" style="width:52px;height:48px;object-fit:cover;border-radius:8px"><div><div style="font-size:0.95rem;font-weight:600">${d.name}</div><div style="color:var(--primary);font-size:0.9rem">${formatCurrency(d.price)}</div></div></div></div>`).join('')}
+            </div>
+          </div>`:''}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── ADMIN ───
+function renderAdmin(sub) {
+  currentUser = getLS(KEYS.currentUser);
+  if (!currentUser || currentUser.role !== 'admin') return `<div class="container text-center" style="padding:120px 20px"><h3>Admin access required</h3><button class="btn-gold mt-3" onclick="navigate('login')">Login</button></div>`;
+  adminSubPage = sub || adminSubPage || 'dashboard';
+
+  const sideLinks = [
+    { id:'dashboard',icon:'📊',label:'Dashboard' },
+    { id:'menu',icon:'🍽️',label:'Menu Items' },
+    { id:'categories',icon:'📁',label:'Categories' },
+    { id:'orders',icon:'📦',label:'Orders' },
+    { id:'reservations',icon:'📅',label:'Reservations' },
+    { id:'staff',icon:'👥',label:'Staff' },
+  ];
+
+  return `
+  <div class="admin-layout">
+    <div class="admin-sidebar">
+      <div style="padding:0 20px 20px;border-bottom:1px solid var(--card-border);margin-bottom:16px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--primary)">Savoria</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Admin Panel</div>
+      </div>
+      ${sideLinks.map(l=>`<div class="sidebar-link ${adminSubPage===l.id?'active':''}" onclick="adminSubPage='${l.id}';navigate('admin','${l.id}')">${l.icon} ${l.label}</div>`).join('')}
+    </div>
+    <div class="admin-main">
+      <div id="adminContent">${renderAdminContent()}</div>
+    </div>
+  </div>`;
+}
+
+function renderAdminContent() {
+  if (adminSubPage === 'dashboard') return renderAdminDashboard();
+  if (adminSubPage === 'menu') return renderAdminMenu();
+  if (adminSubPage === 'categories') return renderAdminCategories();
+  if (adminSubPage === 'orders') return renderAdminOrders();
+  if (adminSubPage === 'reservations') return renderAdminReservations();
+  if (adminSubPage === 'staff') return renderAdminStaff();
+  return '';
+}
+
+function renderAdminDashboard() {
+  const orders = getOrders();
+  const today = new Date().toDateString();
+  const todayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === today);
+  const todayRevenue = todayOrders.reduce((s,o) => s+o.total, 0);
+  const reservations = getReservations();
+  const todayRes = reservations.filter(r => r.date === new Date().toISOString().split('T')[0]);
+  const recentOrders = orders.slice(-8).reverse();
+
+  return `
+  <div>
+    <h3 style="font-size:2rem;font-weight:300;margin-bottom:24px">Dashboard <strong>Overview</strong></h3>
+    <div class="row g-3 mb-4">
+      ${[
+        ['📦','Today\'s Orders',todayOrders.length,'var(--primary)'],
+        ['💰','Today\'s Revenue','$'+todayRevenue.toFixed(2),'var(--success)'],
+        ['📅','Today\'s Reservations',todayRes.length,'var(--accent)'],
+        ['🍽️','Menu Items',getDishes().length,'#4ECDC4'],
+      ].map(([i,l,v,c])=>`
+      <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+          <div style="font-size:1.8rem;margin-bottom:8px">${i}</div>
+          <div class="stat-num" style="color:${c}">${v}</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px">${l}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <!-- Revenue chart -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:20px">
+      <h6 style="font-size:1.2rem;font-weight:300;margin-bottom:16px">Revenue — <strong>Last 7 Days</strong></h6>
+      <canvas id="revenueChart" height="160"></canvas>
+    </div>
+
+    <!-- Recent orders -->
+    <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:24px">
+      <h6 style="font-size:1.2rem;font-weight:300;margin-bottom:16px">Recent <strong>Orders</strong></h6>
+      ${!recentOrders.length?`<p style="color:var(--text-muted)">No orders yet.</p>`:`
+      <div style="overflow-x:auto">
+        <table class="table-gold">
+          <thead><tr><th>Order #</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${recentOrders.map(o=>`<tr>
+              <td style="font-size:0.82rem">#${o.id.slice(-6).toUpperCase()}</td>
+              <td>${o.customerName||'Guest'}</td>
+              <td style="color:var(--text-muted);font-size:0.82rem">${o.items.length} item(s)</td>
+              <td style="color:var(--primary);font-weight:600">${formatCurrency(o.total)}</td>
+              <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+              <td>
+                <select style="background:rgba(255,255,255,0.05);border:1px solid var(--card-border);color:var(--text-muted);padding:4px 8px;border-radius:6px;font-size:0.8rem;cursor:pointer" onchange="updateOrderStatus('${o.id}',this.value)">
+                  ${['placed','confirmed','preparing','ready','delivered','rejected'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+                </select>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`}
+    </div>
+  </div>`;
+}
+
+function renderAdminMenu() {
+  const dishes = getDishes();
+  return `
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 style="font-size:2rem;font-weight:300">Menu <strong>Items</strong></h3>
+      <button class="btn-gold btn-sm-gold" onclick="showDishModal()">+ Add Dish</button>
+    </div>
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--card-border);border-radius:16px">
+      <table class="table-gold">
+        <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th>Featured</th><th>Rating</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${dishes.map(d=>`<tr>
+            <td><img src="${d.image}" style="width:48px;height:40px;object-fit:cover;border-radius:8px" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=100&q=80'"></td>
+            <td style="font-weight:600;max-width:160px">${d.name}</td>
+            <td style="text-transform:capitalize;color:var(--text-muted)">${d.category}</td>
+            <td style="color:var(--primary);font-weight:600">${formatCurrency(d.price)}</td>
+            <td><label class="toggle-switch"><input type="checkbox" ${d.isAvailable?'checked':''} onchange="toggleDishProp('${d.id}','isAvailable',this.checked)"><span class="toggle-slider"></span></label></td>
+            <td><label class="toggle-switch"><input type="checkbox" ${d.isFeatured?'checked':''} onchange="toggleDishProp('${d.id}','isFeatured',this.checked)"><span class="toggle-slider"></span></label></td>
+            <td>${starsHTML(d.rating)}</td>
+            <td class="d-flex gap-2">
+              <button class="icon-btn" onclick="showDishModal('${d.id}')">✏️</button>
+              <button class="icon-btn danger" onclick="deleteDish('${d.id}')">🗑</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderAdminCategories() {
+  const cats = getCategories();
+  const dishes = getDishes();
+  return `
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 style="font-size:2rem;font-weight:300">Categories</h3>
+      <button class="btn-gold btn-sm-gold" onclick="showCatModal()">+ Add Category</button>
+    </div>
+    <div class="row g-3">
+      ${cats.map(c=>{
+        const count = dishes.filter(d=>d.category===c.id).length;
+        return `<div class="col-md-6 col-lg-4">
+          <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:20px;display:flex;gap:16px;align-items:center">
+            <div style="font-size:2.5rem">${c.icon}</div>
+            <div class="flex-1">
+              <div style="font-weight:700;font-size:1.05rem">${c.name}</div>
+              <div style="color:var(--text-muted);font-size:0.82rem">${c.desc}</div>
+              <div style="color:var(--primary);font-size:0.8rem;margin-top:4px">${count} dish${count!==1?'es':''}</div>
+            </div>
+            <button class="icon-btn danger" onclick="${count?`alert('Cannot delete: ${count} dish(es) exist in this category')`:`deleteCat('${c.id}')`}">🗑</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function renderAdminOrders() {
+  const orders = getOrders().sort((a,b)=>b.createdAt-a.createdAt);
+  return `
+  <div>
+    <h3 style="font-size:2rem;font-weight:300;margin-bottom:24px">All <strong>Orders</strong></h3>
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--card-border);border-radius:16px">
+      <table class="table-gold">
+        <thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Type</th><th>Total</th><th>Status</th><th>Update</th></tr></thead>
+        <tbody>
+          ${!orders.length?`<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:32px">No orders yet</td></tr>`:''}
+          ${orders.map(o=>`<tr>
+            <td style="font-size:0.82rem">#${o.id.slice(-6).toUpperCase()}</td>
+            <td>${o.customerName||'Guest'}</td>
+            <td style="color:var(--text-muted);font-size:0.82rem">${formatDate(o.createdAt)}</td>
+            <td style="text-transform:capitalize;color:var(--text-muted)">${o.orderType||'delivery'}</td>
+            <td style="color:var(--primary);font-weight:600">${formatCurrency(o.total)}</td>
+            <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+            <td>
+              <select style="background:rgba(255,255,255,0.05);border:1px solid var(--card-border);color:var(--text-muted);padding:4px 8px;border-radius:6px;font-size:0.8rem;cursor:pointer" onchange="updateOrderStatus('${o.id}',this.value)">
+                ${['placed','confirmed','preparing','ready','delivered','rejected'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+              </select>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderAdminReservations() {
+  const res = getReservations().sort((a,b)=>b.createdAt-a.createdAt);
+  return `
+  <div>
+    <h3 style="font-size:2rem;font-weight:300;margin-bottom:24px">Reservations <strong>Management</strong></h3>
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--card-border);border-radius:16px">
+      <table class="table-gold">
+        <thead><tr><th>Ref#</th><th>Guest</th><th>Date & Time</th><th>Guests</th><th>Occasion</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${!res.length?`<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:32px">No reservations</td></tr>`:''}
+          ${res.map(r=>`<tr>
+            <td style="font-size:0.8rem">#${r.id.slice(-6).toUpperCase()}</td>
+            <td>${r.customerName}<br><span style="font-size:0.78rem;color:var(--text-muted)">${r.phone}</span></td>
+            <td>${r.date}<br><span style="color:var(--primary);font-size:0.85rem">${r.time}</span></td>
+            <td>${r.guests}</td>
+            <td style="color:var(--text-muted)">${r.occasion||'—'}</td>
+            <td><span class="status-badge status-${r.status}">${r.status}</span></td>
+            <td class="d-flex gap-1 flex-wrap">
+              ${r.status==='pending'?`<button class="btn-gold btn-sm-gold" style="padding:5px 12px;font-size:0.78rem" onclick="updateResStatus('${r.id}','confirmed')">✓ Confirm</button><button class="icon-btn danger" onclick="updateResStatus('${r.id}','cancelled')">✕</button>`:''}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderAdminStaff() {
+  const users = getUsers();
+  return `
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 style="font-size:2rem;font-weight:300">Staff <strong>Management</strong></h3>
+      <button class="btn-gold btn-sm-gold" onclick="showStaffModal()">+ Add Staff</button>
+    </div>
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--card-border);border-radius:16px">
+      <table class="table-gold">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Phone</th></tr></thead>
+        <tbody>
+          ${users.map(u=>`<tr>
+            <td class="d-flex align-items-center gap-2">
+              <div style="width:32px;height:32px;border-radius:50%;background:rgba(200,151,42,0.2);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700;font-size:0.85rem">${u.name[0]}</div>
+              ${u.name}
+            </td>
+            <td style="color:var(--text-muted)">${u.email}</td>
+            <td><span class="status-badge ${u.role==='admin'?'status-confirmed':'status-pending'}">${u.role}</span></td>
+            <td style="color:var(--text-muted)">${u.phone||'—'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════
+// AFTER RENDER LOGIC
+// ═══════════════════════════════════════
+function afterRender(page, extra) {
+  updateCartBadge();
+  if (page === 'menu') { setTimeout(() => renderMenuItems(), 50); }
+  if (page === 'home') { setTimeout(() => startCountUp(), 600); }
+  if (page === 'admin' && adminSubPage === 'dashboard') { setTimeout(() => drawRevenueChart(), 200); }
+  if (page === 'dish') {
+    window._dishQty = 1;
+  }
+  if (page === 'checkout' && checkoutStep === 3) {
+    const el = document.getElementById('orderNum');
+    if (el) el.textContent = window._lastOrderNum || '—';
+  }
+}
+
+function changeDishQty(delta) {
+  window._dishQty = Math.max(1, (window._dishQty||1) + delta);
+  const el = document.getElementById('dishQty');
+  if (el) el.textContent = window._dishQty;
+}
+
+function addToCartDetail(dishId) {
+  addToCart(dishId, window._dishQty || 1);
+}
+
+function updateCartQty(dishId, delta) {
+  let cart = getCart();
+  const item = cart.find(i => i.dishId === dishId);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  setCart(cart);
+  navigate('cart');
+}
+
+function removeFromCart(dishId) {
+  let cart = getCart().filter(i => i.dishId !== dishId);
+  setCart(cart);
+  navigate('cart');
+}
+
+function updateCartNotes(dishId, notes) {
+  let cart = getCart();
+  const item = cart.find(i => i.dishId === dishId);
+  if (item) item.notes = notes;
+  setCart(cart);
+}
+
+function applyPromo() {
+  const code = (document.getElementById('promoInput')||{}).value?.trim().toUpperCase();
+  const promos = getLS(KEYS.promoCodes) || [];
+  const promo = promos.find(p => p.code === code);
+  if (promo) { appliedPromo = promo; navigate('cart'); toast(`Promo "${code}" applied! 🎉`, 'success'); }
+  else { toast('Invalid promo code', 'danger'); }
+}
+
+function placeOrder() {
+  currentUser = getLS(KEYS.currentUser);
+  const cart = getCart();
+  if (!cart.length) { toast('Cart is empty', 'danger'); return; }
+  const dishes = getDishes();
+  let subtotal = 0;
+  const items = cart.map(i => { const d = dishes.find(x=>x.id===i.dishId); if(d) subtotal+=d.price*i.qty; return i; });
+  const deliveryFee = orderType==='delivery'?5:0;
+  const discount = appliedPromo?(appliedPromo.type==='percent'?subtotal*(appliedPromo.value/100):appliedPromo.value):0;
+  const tax = (subtotal-discount)*0.08;
+  const total = subtotal-discount+tax+deliveryFee;
+  const orderId = uuid();
+  const order = {
+    id: orderId, customerId: currentUser?.id||'guest', customerName: currentUser?.name||'Guest',
+    items, subtotal, discount, tax, deliveryFee, total, orderType,
+    status: 'placed', createdAt: Date.now(), promoCode: appliedPromo?.code||null
+  };
+  const orders = getOrders();
+  orders.push(order);
+  setLS(KEYS.orders, orders);
+  setCart([]);
+  appliedPromo = null;
+  window._lastOrderNum = orderId.slice(-8).toUpperCase();
+  checkoutStep = 3;
+  navigate('checkout');
+  toast('Order placed successfully! 🎉', 'success');
+}
+
+function reorder(orderId) {
+  const order = getOrders().find(o => o.id === orderId);
+  if (!order) return;
+  const dishes = getDishes();
+  let cart = [];
+  order.items.forEach(item => {
+    const d = dishes.find(x => x.id === item.dishId);
+    if (d && d.isAvailable) cart.push({ dishId: item.dishId, qty: item.qty, notes: '' });
+  });
+  setCart(cart);
+  navigate('cart');
+  toast('Items added to cart!');
+}
+
+function doLogin() {
+  const email = document.getElementById('login_email')?.value?.trim();
+  const pw = document.getElementById('login_pw')?.value;
+  const errE = document.getElementById('err_email');
+  const errP = document.getElementById('err_pw');
+  if (errE) errE.textContent = '';
+  if (errP) errP.textContent = '';
+  if (!email) { if(errE) errE.textContent = 'Email required'; return; }
+  if (!pw) { if(errP) errP.textContent = 'Password required'; return; }
+  const users = getUsers();
+  const user = users.find(u => u.email === email && u.password === pw);
+  if (!user) { if(errP) errP.textContent = 'Invalid email or password'; return; }
+  setLS(KEYS.currentUser, user);
+  currentUser = user;
+  updateAuthNav();
+  toast(`Welcome back, ${user.name}! 👋`, 'success');
+  // Redirect to intended page if set
+  const redirect = window._redirectAfterLogin;
+  window._redirectAfterLogin = null;
+  if (redirect) {
+    navigate(redirect.page, redirect.extra);
+  } else {
+    navigate(user.role === 'admin' ? 'admin' : 'home');
+  }
+}
+
+function doRegister() {
+  const fields = { name:'reg_name',email:'reg_email',phone:'reg_phone',pw:'reg_pw',cpw:'reg_cpw' };
+  const vals = {};
+  let valid = true;
+  Object.entries(fields).forEach(([k,id]) => { vals[k] = document.getElementById(id)?.value?.trim()||''; });
+  const errs = { rname:'err_rname',remail:'err_remail',rphone:'err_rphone',rpw:'err_rpw',rcpw:'err_rcpw' };
+  Object.values(errs).forEach(id => { const el=document.getElementById(id); if(el) el.textContent=''; });
+
+  if (!vals.name) { const el=document.getElementById('err_rname'); if(el) el.textContent='Name is required'; valid=false; }
+  if (!vals.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(vals.email)) { const el=document.getElementById('err_remail'); if(el) el.textContent='Valid email required'; valid=false; }
+  if (!vals.phone || vals.phone.replace(/\D/g,'').length < 7) { const el=document.getElementById('err_rphone'); if(el) el.textContent='Valid phone required'; valid=false; }
+  if (!vals.pw || vals.pw.length < 8 || !/[A-Z]/.test(vals.pw) || !/[0-9]/.test(vals.pw) || !/[^A-Za-z0-9]/.test(vals.pw)) { const el=document.getElementById('err_rpw'); if(el) el.textContent='Min 8 chars, 1 uppercase, 1 number, 1 special char'; valid=false; }
+  if (vals.pw !== vals.cpw) { const el=document.getElementById('err_rcpw'); if(el) el.textContent='Passwords do not match'; valid=false; }
+  if (!valid) return;
+
+  const users = getUsers();
+  if (users.find(u => u.email === vals.email)) { const el=document.getElementById('err_remail'); if(el) el.textContent='Email already registered'; return; }
+  const user = { id: uuid(), name: vals.name, email: vals.email, password: vals.pw, phone: vals.phone, dob: document.getElementById('reg_dob')?.value||'', role: 'customer' };
+  users.push(user);
+  setLS(KEYS.users, users);
+  setLS(KEYS.currentUser, user);
+  toast('Account created! Welcome to Savoria 🎉', 'success');
+  updateAuthNav();
+  // Redirect to intended page if set
+  const redirect = window._redirectAfterLogin;
+  window._redirectAfterLogin = null;
+  if (redirect) {
+    navigate(redirect.page, redirect.extra);
+  } else {
+    navigate('home');
+  }
+}
+
+function saveProfile() {
+  currentUser = getLS(KEYS.currentUser);
+  if (!currentUser) return;
+  const name = document.getElementById('p_name')?.value?.trim();
+  const phone = document.getElementById('p_phone')?.value?.trim();
+  if (!name) { toast('Name is required', 'danger'); return; }
+  const users = getUsers().map(u => u.id===currentUser.id?{...u,name,phone}:u);
+  setLS(KEYS.users, users);
+  const updated = {...currentUser,name,phone};
+  setLS(KEYS.currentUser, updated);
+  currentUser = updated;
+  toast('Profile updated!', 'success');
+  updateAuthNav();
+}
+
+// ─── Admin actions ───
+function toggleDishProp(id, prop, val) {
+  const dishes = getDishes().map(d => d.id===id?{...d,[prop]:val}:d);
+  setLS(KEYS.dishes, dishes);
+  toast(`Dish ${prop} updated`);
+}
+
+function deleteDish(id) {
+  if (!confirm('Delete this dish?')) return;
+  const dishes = getDishes().filter(d => d.id!==id);
+  setLS(KEYS.dishes, dishes);
+  navigate('admin','menu');
+  toast('Dish deleted', 'danger');
+}
+
+function deleteCat(id) {
+  if (!confirm('Delete this category?')) return;
+  const cats = getCategories().filter(c => c.id!==id);
+  setLS(KEYS.categories, cats);
+  navigate('admin','categories');
+  toast('Category deleted');
+}
+
+function updateOrderStatus(id, status) {
+  const orders = getOrders().map(o => o.id===id?{...o,status}:o);
+  setLS(KEYS.orders, orders);
+  toast(`Order status updated to: ${status}`);
+}
+
+function updateResStatus(id, status) {
+  const res = getReservations().map(r => r.id===id?{...r,status}:r);
+  setLS(KEYS.reservations, res);
+  adminSubPage = 'reservations';
+  navigate('admin');
+  toast(`Reservation ${status}`);
+}
+
+// ─── Dish modal ───
+function showDishModal(id) {
+  const dishes = getDishes();
+  const cats = getCategories();
+  const d = id ? dishes.find(x=>x.id===id) : null;
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop-custom';
+  modal.innerHTML = `
+  <div class="modal-box" style="max-width:700px">
+    <button class="modal-close" onclick="this.closest('.modal-backdrop-custom').remove()">✕</button>
+    <h4 style="font-size:1.8rem;font-weight:300;margin-bottom:20px">${d?'Edit':'Add'} <strong>Dish</strong></h4>
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label-gold">Name *</label><input class="form-control-gold" id="dm_name" value="${d?d.name:''}" placeholder="Dish name"></div>
+      <div class="col-md-6"><label class="form-label-gold">Category *</label><select class="form-control-gold" id="dm_cat">${cats.map(c=>`<option value="${c.id}" ${d&&d.category===c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+      <div class="col-md-4"><label class="form-label-gold">Price *</label><input class="form-control-gold" id="dm_price" type="number" step="0.01" value="${d?d.price:''}" placeholder="0.00"></div>
+      <div class="col-md-4"><label class="form-label-gold">Original Price</label><input class="form-control-gold" id="dm_oprice" type="number" step="0.01" value="${d?d.originalPrice:''}" placeholder="0.00"></div>
+      <div class="col-md-4"><label class="form-label-gold">Prep Time (min)</label><input class="form-control-gold" id="dm_prep" type="number" value="${d?d.prepTime:''}" placeholder="15"></div>
+      <div class="col-md-6"><label class="form-label-gold">Calories</label><input class="form-control-gold" id="dm_cal" type="number" value="${d?d.calories:''}" placeholder="400"></div>
+      <div class="col-md-6"><label class="form-label-gold">Badge</label><select class="form-control-gold" id="dm_badge"><option value="">None</option>${["Chef's Special","New","Popular","Limited"].map(b=>`<option value="${b}" ${d&&d.badge===b?'selected':''}>${b}</option>`).join('')}</select></div>
+      <div class="col-12"><label class="form-label-gold">Image URL</label><input class="form-control-gold" id="dm_img" value="${d?d.image:''}" placeholder="https://..."></div>
+      <div class="col-12"><label class="form-label-gold">Description</label><textarea class="form-control-gold" id="dm_desc" rows="2" placeholder="Dish description...">${d?d.description:''}</textarea></div>
+      <div class="col-12"><label class="form-label-gold">Ingredients (comma-separated)</label><input class="form-control-gold" id="dm_ingr" value="${d?d.ingredients.join(', '):''}" placeholder="Ingredient 1, Ingredient 2"></div>
+      <div class="col-12"><label class="form-label-gold">Allergens (comma-separated)</label><input class="form-control-gold" id="dm_allerg" value="${d?d.allergens.join(', '):''}" placeholder="Gluten, Dairy"></div>
+      <div class="col-12 d-flex gap-4 flex-wrap">
+        <label style="cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.9rem"><input type="checkbox" id="dm_veg" ${d&&d.isVegetarian?'checked':''} style="accent-color:var(--primary)"> 🌿 Vegetarian</label>
+        <label style="cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.9rem"><input type="checkbox" id="dm_spicy" ${d&&d.isSpicy?'checked':''} style="accent-color:var(--primary)"> 🌶 Spicy</label>
+        <label style="cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.9rem"><input type="checkbox" id="dm_feat" ${d&&d.isFeatured?'checked':''} style="accent-color:var(--primary)"> ⭐ Featured</label>
+        <label style="cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.9rem"><input type="checkbox" id="dm_avail" ${!d||d.isAvailable?'checked':''} style="accent-color:var(--primary)"> ✅ Available</label>
+      </div>
+      <div class="col-12 d-flex gap-3 mt-2">
+        <button class="btn-gold flex-1" onclick="saveDish('${id||''}')">Save Dish</button>
+        <button class="btn-outline-gold" onclick="this.closest('.modal-backdrop-custom').remove()">Cancel</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveDish(id) {
+  const name = document.getElementById('dm_name')?.value?.trim();
+  const price = parseFloat(document.getElementById('dm_price')?.value);
+  if (!name || isNaN(price)) { toast('Name and price are required', 'danger'); return; }
+  const dish = {
+    id: id || uuid(),
+    name, price, category: document.getElementById('dm_cat')?.value,
+    originalPrice: parseFloat(document.getElementById('dm_oprice')?.value)||price,
+    prepTime: parseInt(document.getElementById('dm_prep')?.value)||15,
+    calories: parseInt(document.getElementById('dm_cal')?.value)||400,
+    badge: document.getElementById('dm_badge')?.value||null,
+    image: document.getElementById('dm_img')?.value||DISH_IMAGES[0],
+    description: document.getElementById('dm_desc')?.value||'',
+    ingredients: (document.getElementById('dm_ingr')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    allergens: (document.getElementById('dm_allerg')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    isVegetarian: document.getElementById('dm_veg')?.checked,
+    isSpicy: document.getElementById('dm_spicy')?.checked,
+    isFeatured: document.getElementById('dm_feat')?.checked,
+    isAvailable: document.getElementById('dm_avail')?.checked,
+    rating: 4.5, reviewCount: 0, createdAt: Date.now(),
+  };
+  let dishes = getDishes();
+  const idx = dishes.findIndex(d=>d.id===id);
+  if (idx>=0) { dishes[idx]={...dishes[idx],...dish}; } else { dishes.push(dish); }
+  setLS(KEYS.dishes, dishes);
+  document.querySelector('.modal-backdrop-custom')?.remove();
+  adminSubPage='menu'; navigate('admin');
+  toast('Dish saved!', 'success');
+}
+
+function showCatModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop-custom';
+  modal.innerHTML = `
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="this.closest('.modal-backdrop-custom').remove()">✕</button>
+    <h4 style="font-size:1.8rem;font-weight:300;margin-bottom:20px">Add <strong>Category</strong></h4>
+    <div class="mb-3"><label class="form-label-gold">ID (no spaces) *</label><input class="form-control-gold" id="cat_id" placeholder="e.g. pasta"></div>
+    <div class="mb-3"><label class="form-label-gold">Name *</label><input class="form-control-gold" id="cat_name" placeholder="Pasta"></div>
+    <div class="mb-3"><label class="form-label-gold">Icon (emoji) *</label><input class="form-control-gold" id="cat_icon" placeholder="🍝" style="font-size:1.5rem"></div>
+    <div class="mb-4"><label class="form-label-gold">Description</label><input class="form-control-gold" id="cat_desc" placeholder="Short description"></div>
+    <div class="d-flex gap-3">
+      <button class="btn-gold flex-1" onclick="saveCat()">Add Category</button>
+      <button class="btn-outline-gold" onclick="this.closest('.modal-backdrop-custom').remove()">Cancel</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveCat() {
+  const id = document.getElementById('cat_id')?.value?.trim().replace(/\s/g,'');
+  const name = document.getElementById('cat_name')?.value?.trim();
+  const icon = document.getElementById('cat_icon')?.value?.trim();
+  if (!id||!name) { toast('ID and name required','danger'); return; }
+  const cats = getCategories();
+  if (cats.find(c=>c.id===id)) { toast('ID already exists','danger'); return; }
+  cats.push({ id,name,icon:icon||'🍴',desc:document.getElementById('cat_desc')?.value?.trim()||'' });
+  setLS(KEYS.categories, cats);
+  document.querySelector('.modal-backdrop-custom')?.remove();
+  adminSubPage='categories'; navigate('admin');
+  toast('Category added!', 'success');
+}
+
+function showStaffModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop-custom';
+  modal.innerHTML = `
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="this.closest('.modal-backdrop-custom').remove()">✕</button>
+    <h4 style="font-size:1.8rem;font-weight:300;margin-bottom:20px">Add <strong>Staff</strong></h4>
+    <div class="mb-3"><label class="form-label-gold">Full Name *</label><input class="form-control-gold" id="st_name" placeholder="Staff name"></div>
+    <div class="mb-3"><label class="form-label-gold">Email *</label><input class="form-control-gold" id="st_email" type="email" placeholder="staff@savoria.com"></div>
+    <div class="mb-3"><label class="form-label-gold">Password *</label><input class="form-control-gold" id="st_pw" type="password" placeholder="Password"></div>
+    <div class="mb-4"><label class="form-label-gold">Role</label><select class="form-control-gold" id="st_role"><option value="admin">Admin</option><option value="staff">Staff</option></select></div>
+    <div class="d-flex gap-3">
+      <button class="btn-gold flex-1" onclick="saveStaff()">Add Staff</button>
+      <button class="btn-outline-gold" onclick="this.closest('.modal-backdrop-custom').remove()">Cancel</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveStaff() {
+  const name = document.getElementById('st_name')?.value?.trim();
+  const email = document.getElementById('st_email')?.value?.trim();
+  const pw = document.getElementById('st_pw')?.value;
+  const role = document.getElementById('st_role')?.value;
+  if (!name||!email||!pw) { toast('All fields required','danger'); return; }
+  const users = getUsers();
+  if (users.find(u=>u.email===email)) { toast('Email already exists','danger'); return; }
+  users.push({ id:uuid(), name, email, password:pw, phone:'', role });
+  setLS(KEYS.users, users);
+  document.querySelector('.modal-backdrop-custom')?.remove();
+  adminSubPage='staff'; navigate('admin');
+  toast('Staff added!', 'success');
+}
+
+// ─── Reservation logic ───
+let _selectedOccasion = null;
+function selectTime(el, time) {
+  document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTimeSlot = time;
+}
+function selectOccasion(el, occ) {
+  document.querySelectorAll('#occasionBtns .cat-tab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  _selectedOccasion = occ;
+}
+function renderTimeSlots() { /* Slots are static for demo */ }
+
+function makeReservation() {
+  currentUser = getLS(KEYS.currentUser);
+  const name = document.getElementById('res_name')?.value?.trim();
+  const phone = document.getElementById('res_phone')?.value?.trim();
+  const date = document.getElementById('res_date')?.value;
+  const guests = document.getElementById('res_guests')?.value;
+  const notes = document.getElementById('res_notes')?.value?.trim();
+  if (!name||!phone||!date||!selectedTimeSlot) { toast('Please fill all required fields and select a time', 'danger'); return; }
+  const res = {
+    id: uuid(), customerId: currentUser?.id||'guest', customerName: name, phone,
+    date, time: selectedTimeSlot, guests: +guests, tableNumber: null,
+    occasion: _selectedOccasion, notes, status: 'pending', createdAt: Date.now()
+  };
+  const reservations = getReservations();
+  reservations.push(res);
+  setLS(KEYS.reservations, reservations);
+  selectedTimeSlot = null; _selectedOccasion = null;
+  navigate('reservations');
+  toast(`Reservation booked! Ref #${res.id.slice(-6).toUpperCase()} 🎉`, 'success');
+}
+
+// ─── Revenue chart ───
+function drawRevenueChart() {
+  const canvas = document.getElementById('revenueChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const orders = getOrders();
+  const days = [];
+  const labels = [];
+  const today = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    const ds = d.toDateString();
+    const rev = orders.filter(o=>new Date(o.createdAt).toDateString()===ds).reduce((s,o)=>s+o.total,0);
+    days.push(rev);
+    labels.push(d.toLocaleDateString('en',{weekday:'short'}));
+  }
+  const W = canvas.parentElement.offsetWidth - 48;
+  canvas.width = W; canvas.height = 160;
+  const maxVal = Math.max(...days, 100);
+  const pad = 30; const chartW = W-pad*2; const chartH = 120;
+  ctx.clearRect(0,0,W,160);
+  // Grid
+  ctx.strokeStyle = 'rgba(200,151,42,0.1)'; ctx.lineWidth = 1;
+  for (let i=0;i<4;i++) { const y=pad+chartH/3*i; ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke(); }
+  // Bars
+  const bw = chartW/7*0.55; const gap = chartW/7;
+  days.forEach((v,i) => {
+    const x = pad + i*gap + gap*0.225;
+    const h = (v/maxVal)*chartH;
+    const y = pad+chartH-h;
+    const grad = ctx.createLinearGradient(0,y,0,pad+chartH);
+    grad.addColorStop(0,'rgba(200,151,42,0.8)'); grad.addColorStop(1,'rgba(200,151,42,0.15)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.roundRect(x,y,bw,h,4); ctx.fill();
+    ctx.fillStyle='rgba(200,151,42,0.6)'; ctx.font='10px Jost'; ctx.textAlign='center';
+    ctx.fillText(labels[i],x+bw/2,pad+chartH+16);
+    if(v>0){ ctx.fillStyle='#F5EDD6'; ctx.font='10px Jost'; ctx.fillText('$'+v.toFixed(0),x+bw/2,y-6); }
+  });
+}
+
+// ─── Count up ───
+function startCountUp() {
+  document.querySelectorAll('.count-up').forEach(el => {
+    const target = +el.dataset.target;
+    const duration = 1800;
+    const step = target / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current).toLocaleString();
+    }, 16);
+  });
+}
+
+// ─── Navbar scroll ───
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── Init ───
+initData();
+updateAuthNav();
+navigate('home');
+</script>
+</body>
+</html>
